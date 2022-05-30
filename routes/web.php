@@ -23,7 +23,7 @@ Auth::routes(['verify' => true]);
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('home', function () {
-    return redirect('/dashboard');
+    return redirect('/inventory');
 });
 
 Route::get('/{vue_capture?}', function () {
