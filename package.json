@@ -23,12 +23,13 @@
         "webpack": "^5.9.0"
     },
     "dependencies": {
-        "admin-lte": "^3.2.0",
-        "bootstrap": "^4.6.1",
         "@fortawesome/fontawesome-free": "^5.15.4",
+        "admin-lte": "^3.2.0",
         "autoprefixer": "^10.4.5",
+        "bootstrap": "^4.6.1",
         "laravel-vue-pagination": "^2.3.1",
         "moment": "^2.29.1",
+        "npm": "^8.12.1",
         "sweetalert2": "^9.17.2",
         "vform": "^1.0.1",
         "vue-progressbar": "^0.7.5",
