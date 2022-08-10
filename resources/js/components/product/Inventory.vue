@@ -19,6 +19,7 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body table-responsive p-0">
+              <input type="text" placeholder="Filter by asset code or employee name" v-model="filter">
               <table class="table table-hover">
                 <thead>
                   <tr>
@@ -32,6 +33,7 @@
                     <th>Purchase Date</th>
                     <th>Name</th>
                     <th>Status</th>
+                    <th>Notes</th>
                     <th>Check Date</th>
                     <th>Checked By</th>
                     <th>Action</th>
@@ -48,7 +50,8 @@
                     <td>{{inventory.purchasecost}}</td>
                     <td>{{inventory.purchasedate}}</td>
                     <td>{{inventory.name}}</td>
-                    <td>{{inventory.status}}</td>
+                    <td>{{inventory.status}}</td
+                    <td>{{inventory.notes}}</td>
                     <td>{{inventory.checkdate}}</td>
                     <td>{{inventory.checkedby}}</td>
                     <td>
@@ -151,6 +154,11 @@
                     <has-error :form="form" field="status"></has-error>
                   </div>
                 </div>
+                <div class="form-group col-md-8">
+                    <label>Notes</label>
+                    <input v-model="form.notes" type="text" name="notes" class="form-control" :class="{ 'is-invalid': form.errors.has('notes') }">
+                    <has-error :form="form" field="notes"></has-error>
+                  </div>
                 <div class="form-row">
                   <div class="form-group col-md-4">
                     <label>Check Date</label>
@@ -187,7 +195,9 @@ export default {
   data() {
     return {
       editmode: false,
-      inventories: {},
+      inventories: {
+        filter: '',
+      },
       form: new Form({
         id: "",
         idcode: "",
@@ -201,6 +211,7 @@ export default {
         purchasedate: "",
         username: "",
         status: "",
+        notes:"",
         checkdate: "",
         checkedby: "",
       }),
@@ -330,8 +341,13 @@ export default {
   },
   computed: {
     filteredItems() {
-      return this.autocompleteItems.filter((i) => {
-        return i.text.toLowerCase().indexOf(this.tag.toLowerCase()) !== -1;
+      return this.inventories.filter((inventory) => {
+        const idcode = inventory.idcode.toString().toLowerCase();
+        const category = inventory.category_id.toString.toLowerCase();
+        const name = inventory.name.toLowerCase();
+        const searchTerm = this.filter.toLowerCase();
+
+        return idcode.includes(searchTerm) || name.includes(searchTerm);
       });
     },
   },
