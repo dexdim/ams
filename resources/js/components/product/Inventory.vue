@@ -2,15 +2,12 @@
   <section class="content">
     <div class="container-fluid">
       <div class="row">
-
         <div class="col-12">
-
+          <input type="text" placeholder="Search here" v-model="search">
           <div class="card">
             <div class="card-header">
               <h3 class="card-title">Inventory List</h3>
-
               <div class="card-tools">
-
                 <button type="button" class="btn btn-sm btn-primary" @click="newInventory">
                   <i class="fa fa-plus-square"></i>
                   Add New
@@ -19,7 +16,6 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body table-responsive p-0">
-              <input type="text" placeholder="Filter by asset code or employee name" v-model="filter">
               <table class="table table-hover">
                 <thead>
                   <tr>
@@ -50,8 +46,8 @@
                     <td>{{inventory.purchasecost}}</td>
                     <td>{{inventory.purchasedate}}</td>
                     <td>{{inventory.name}}</td>
-                    <td>{{inventory.status}}</td
-                    <td>{{inventory.notes}}</td>
+                    <td>{{inventory.status}}</td>
+                    <td>{{inventory.notes | truncate(30, '...')}}</td>
                     <td>{{inventory.checkdate}}</td>
                     <td>{{inventory.checkedby}}</td>
                     <td>
@@ -67,11 +63,13 @@
                 </tbody>
               </table>
             </div>
+
             <!-- /.card-body -->
             <div class="card-footer">
               <pagination :data="inventories" @pagination-change-page="getResults"></pagination>
             </div>
           </div>
+          <pre>{{inventories}}</pre>
           <!-- /.card -->
         </div>
       </div>
@@ -90,6 +88,7 @@
 
             <form @submit.prevent="editmode ? updateInventory() : createInventory()">
               <div class="modal-body">
+
                 <div class="form-row">
                   <div class="form-group col-md-6">
                     <label>ID Code</label>
@@ -104,11 +103,13 @@
                     <has-error :form="form" field="category_id"></has-error>
                   </div>
                 </div>
+
                 <div class="form-group">
                   <label>Description</label>
                   <input v-model="form.description" type="text" name="description" class="form-control" :class="{ 'is-invalid': form.errors.has('description') }">
                   <has-error :form="form" field="description"></has-error>
                 </div>
+
                 <div class="form-row">
                   <div class="form-group col-md-4">
                     <label>Brand</label>
@@ -126,6 +127,7 @@
                     <has-error :form="form" field="supplier"></has-error>
                   </div>
                 </div>
+
                 <div class="form-row">
                   <div class="form-group col-md-4">
                     <label>Purchase Cost</label>
@@ -138,6 +140,7 @@
                     <has-error :form="form" field="purchasedate"></has-error>
                   </div>
                 </div>
+
                 <div class="form-row">
                   <div class="form-group col-md-8">
                     <label>Name</label>
@@ -154,11 +157,13 @@
                     <has-error :form="form" field="status"></has-error>
                   </div>
                 </div>
-                <div class="form-group col-md-8">
-                    <label>Notes</label>
-                    <input v-model="form.notes" type="text" name="notes" class="form-control" :class="{ 'is-invalid': form.errors.has('notes') }">
-                    <has-error :form="form" field="notes"></has-error>
-                  </div>
+
+                <div class="form-group">
+                  <label>Notes</label>
+                  <input v-model="form.notes" type="text" name="notes" class="form-control" :class="{ 'is-invalid': form.errors.has('notes') }">
+                  <has-error :form="form" field="notes"></has-error>
+                </div>
+
                 <div class="form-row">
                   <div class="form-group col-md-4">
                     <label>Check Date</label>
@@ -195,9 +200,8 @@ export default {
   data() {
     return {
       editmode: false,
-      inventories: {
-        filter: '',
-      },
+      inventories: [],
+      search: "",
       form: new Form({
         id: "",
         idcode: "",
@@ -211,12 +215,11 @@ export default {
         purchasedate: "",
         username: "",
         status: "",
-        notes:"",
+        notes: "",
         checkdate: "",
         checkedby: "",
       }),
       categories: [],
-      autocompleteItems: [],
     };
   },
   methods: {
@@ -225,7 +228,8 @@ export default {
 
       axios
         .get("/api/inventory?page=" + page)
-        .then(({ data }) => (this.inventories = data.data));
+        .then(({ data }) => (this.inventories = data.data))
+        .catch((error) => console.log(error));
 
       this.$Progress.finish();
     },
@@ -233,13 +237,15 @@ export default {
       // if(this.$gate.isAdmin()){
       axios
         .get("/api/inventory")
-        .then(({ data }) => (this.inventories = data.data));
+        .then(({ data }) => (this.inventories = data.data))
+        .catch((error) => console.log(error));
       // }
     },
     loadCategories() {
       axios
         .get("/api/category/list")
-        .then(({ data }) => (this.categories = data.data));
+        .then(({ data }) => (this.categories = data.data))
+        .catch((error) => console.log(error));
     },
     editInventory(inventory) {
       this.editmode = true;
@@ -328,27 +334,26 @@ export default {
   mounted() {},
   created() {
     this.$Progress.start();
-
     this.loadInventory();
     this.loadCategories();
-
     this.$Progress.finish();
   },
-  filters: {
-    truncate: function (text, length, suffix) {
-      return text.substring(0, length) + suffix;
-    },
-  },
-  computed: {
-    filteredItems() {
-      return this.inventories.filter((inventory) => {
-        const idcode = inventory.idcode.toString().toLowerCase();
-        const category = inventory.category_id.toString.toLowerCase();
-        const name = inventory.name.toLowerCase();
-        const searchTerm = this.filter.toLowerCase();
 
-        return idcode.includes(searchTerm) || name.includes(searchTerm);
+  computed: {
+    filteredItem() {
+      const search = this.search.toLowerCase();
+      const data = [];
+
+      this.inventories.forEach((current_page) => {
+        current_page.data.forEach((d) => {
+          const idcode = d.idcode.toLowerCase();
+
+          if (idcode.includes(search)) {
+            data.push(d);
+          }
+        });
       });
+      return data;
     },
   },
 };

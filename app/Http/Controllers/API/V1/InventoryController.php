@@ -30,10 +30,11 @@ class InventoryController extends BaseController
      */
     public function index()
     {
-        $inventorys = $this->inventory->latest()->with('category')->paginate(10);
+        $inventories = $this->inventory->latest()->with('category')->paginate(0);
 
-        return $this->sendResponse($inventorys, 'Inventory list');
+        return $this->sendResponse($inventories, 'Inventory list');
     }
+    
 
     /**
      * Store a newly created resource in storage.
@@ -44,7 +45,7 @@ class InventoryController extends BaseController
     public function store(InventoryRequest $request)
     {
 
-        $inventorys = $this->inventory->create([
+        $inventories = $this->inventory->create([
 
             'idcode' => $request->get('idcode'),
             'category_id' => $request->get('category_id'),
@@ -56,11 +57,12 @@ class InventoryController extends BaseController
             'purchasedate' => $request->get('purchasedate'),
             'name' => $request->get('name'),
             'status' => $request->get('status'),
+            'notes' => $request->get('notes'),
             'checkdate' => $request->get('checkdate'),
             'checkedby' => $request->get('checkedby'),
         ]);
 
-        return $this->sendResponse($inventorys, 'Inventory created successfully');
+        return $this->sendResponse($inventories, 'Inventory created successfully');
     }
 
     /**

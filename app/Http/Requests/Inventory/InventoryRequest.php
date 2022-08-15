@@ -47,6 +47,7 @@ class InventoryRequest extends FormRequest
             'supplier' => 'required|string|max:45',
             'name' => 'required|string|max:255',
             'status' => 'required|string|max:45',
+            'notes' => 'required|string|max:1000',
             'checkdate' => 'required|string|max:45',
             'checkedby' => 'required|string|max:45',
         ];
@@ -70,6 +71,7 @@ class InventoryRequest extends FormRequest
             'supplier' => 'required|string|max:45',
             'name' => 'required|string|max:255',
             'status' => 'required|string|max:45',
+            'notes' => 'required|string|max:1000',
             'checkdate' => 'required|string|max:45',
             'checkedby' => 'required|string|max:45',
         ];
