@@ -199,6 +199,9 @@
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
 
+var getsheet_url =
+  "{{https://sheets.googleapis.com/v4/spreadsheets/1am2HvRTTYakbvjcGnKmA_ul9f2ysmi2fAfkEuGe8jqo/values/name_email?key=AIzaSyDHL5Y6-8dRvfwl3D_quO1cmm6yb8NjSCA}}";
+
 export default {
   data() {
     return {
@@ -333,6 +336,12 @@ export default {
         }
       });
     },
+
+    loadName(){
+      axios.get(gsheet_url).then(response => (
+        parseData(response.data.feed.entry)
+      ))
+    }
   },
   mounted() {},
   created() {
