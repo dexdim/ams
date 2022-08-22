@@ -8,7 +8,7 @@
             <div class="card-header">
               <h3 class="card-title">Inventory List</h3>
               <div class="card-tools">
-                <button type="button" class="btn btn-sm btn-primary" @click="newInventory">
+                <button type="button" class="btn btn-sm btn-primary" @click="newInventory" v-if="$gate.isAdmin()">
                   <i class="fa fa-plus-square"></i>
                   Add New
                 </button>
@@ -32,7 +32,7 @@
                     <th>Notes</th>
                     <th>Check Date</th>
                     <th>Checked By</th>
-                    <th>Action</th>
+                    <th v-if="$gate.isAdmin()">Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -48,9 +48,9 @@
                     <td>{{inventory.name}}</td>
                     <td>{{inventory.status}}</td>
                     <td>{{inventory.notes | truncate(30, '...')}}</td>
-                    <td>{{inventory.checkdate}}</td>
+                    <td>{{inventory.checkdate | format('DD MMMM YYYY')}}</td>
                     <td>{{inventory.checkedby}}</td>
-                    <td>
+                    <td v-if="$gate.isAdmin()">
                       <a href="#" @click="editInventory(inventory)">
                         <i class="fa fa-edit blue"></i>
                       </a>
@@ -136,7 +136,7 @@
                   </div>
                   <div class="form-group col-md-4">
                     <label>Purchase Date</label>
-                    <input v-model="form.purchasedate" type="text" name="purchasedate" class="form-control" :class="{ 'is-invalid': form.errors.has('purchasedate') }">
+                    <date-picker format="DD MMMM YYYY" v-model="form.purchasedate" name="purchasedate" class="form-control" :class="{ 'is-invalid': form.errors.has('purchasedate') }"></date-picker>
                     <has-error :form="form" field="purchasedate"></has-error>
                   </div>
                 </div>
@@ -167,7 +167,7 @@
                 <div class="form-row">
                   <div class="form-group col-md-4">
                     <label>Check Date</label>
-                    <input v-model="form.checkdate" type="text" name="checkdate" class="form-control" :class="{ 'is-invalid': form.errors.has('checkdate') }">
+                    <date-picker format="DD MMMM YYYY" v-model="form.checkdate" name="checkdate" class="form-control" :class="{ 'is-invalid': form.errors.has('checkdate') }"></date-picker>
                     <has-error :form="form" field="checkdate"></has-error>
                   </div>
                   <div class="form-group col-md-4">
@@ -196,6 +196,9 @@
 
 
 <script>
+import DatePicker from "vue2-datepicker";
+import "vue2-datepicker/index.css";
+
 export default {
   data() {
     return {
@@ -356,5 +359,6 @@ export default {
       return data;
     },
   },
+  components: { DatePicker },
 };
 </script>
