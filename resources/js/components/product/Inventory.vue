@@ -348,6 +348,7 @@ export default {
     this.$Progress.start();
     this.loadInventory();
     this.loadCategories();
+    this.loadName();
     this.$Progress.finish();
   },
 
