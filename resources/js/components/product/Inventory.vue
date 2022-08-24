@@ -36,7 +36,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="inventory in inventories.data" :key="inventory.id">
+                  <tr v-for="inventory in inventories.data.data" :key="inventory.id">
                     <td>{{inventory.idcode}}</td>
                     <td>{{inventory.category.name}}</td>
                     <td>{{inventory.description | truncate(30, '...')}}</td>
@@ -66,10 +66,10 @@
 
             <!-- /.card-body -->
             <div class="card-footer">
-              <pagination :data="inventories" @pagination-change-page="getResults"></pagination>
+              <pagination :data="inventories.data" @pagination-change-page="getResults"></pagination>
             </div>
           </div>
-          <pre>{{inventories}}</pre>
+          <pre>{{employees}}</pre>
           <!-- /.card -->
         </div>
       </div>
@@ -98,7 +98,7 @@
                   <div class="form-group col-md-6">
                     <label>Category</label>
                     <select class="form-control" v-model="form.category_id">
-                      <option v-for="(cat,index) in categories" :key="index" :value="index" :selected="index == form.category_id">{{ cat }}</option>
+                      <option v-for="(cat,index) in categories.data" :key="index" :value="index" :selected="index == form.category_id">{{ cat }}</option>
                     </select>
                     <has-error :form="form" field="category_id"></has-error>
                   </div>
@@ -144,8 +144,10 @@
                 <div class="form-row">
                   <div class="form-group col-md-8">
                     <label>Name</label>
-                    <input v-model="form.name" type="text" name="name" class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
-                    <has-error :form="form" field="name"></has-error>
+                    <select class="form-control" v-model="form.fullname">
+                      <option v-for="(fullname,index) in employees" :key="index" :value="index" :selected="index == form.fullname">{{ fullname }}</option>
+                    </select>
+                    <has-error :form="form" field="fullname"></has-error>
                   </div>
                   <div class="form-group col-md-4">
                     <label>Status</label>
@@ -199,14 +201,11 @@
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
 
-var getsheet_url =
-  "{{https://sheets.googleapis.com/v4/spreadsheets/1am2HvRTTYakbvjcGnKmA_ul9f2ysmi2fAfkEuGe8jqo/values/name_email?key=AIzaSyDHL5Y6-8dRvfwl3D_quO1cmm6yb8NjSCA}}";
-
 export default {
   data() {
     return {
       editmode: false,
-      inventories: [],
+      inventories: {},
       search: "",
       form: new Form({
         id: "",
@@ -225,7 +224,8 @@ export default {
         checkdate: "",
         checkedby: "",
       }),
-      categories: [],
+      categories: {},
+      employees: [],
     };
   },
   methods: {
@@ -234,7 +234,7 @@ export default {
 
       axios
         .get("/api/inventory?page=" + page)
-        .then(({ data }) => (this.inventories = data.data))
+        .then(({ data }) => (this.inventories = data))
         .catch((error) => console.log(error));
 
       this.$Progress.finish();
@@ -243,14 +243,22 @@ export default {
       // if(this.$gate.isAdmin()){
       axios
         .get("/api/inventory")
-        .then(({ data }) => (this.inventories = data.data))
+        .then(({ data }) => (this.inventories = data))
         .catch((error) => console.log(error));
       // }
     },
-    loadCategories() {
+    loadCategory() {
       axios
         .get("/api/category/list")
-        .then(({ data }) => (this.categories = data.data))
+        .then(({ data }) => (this.categories = data))
+        .catch((error) => console.log(error));
+    },
+    loadEmployee() {
+      axios
+        .get(
+          "http://localhost:8000/v4/spreadsheets/1am2HvRTTYakbvjcGnKmA_ul9f2ysmi2fAfkEuGe8jqo/values/employees?key=AIzaSyDHL5Y6-8dRvfwl3D_quO1cmm6yb8NjSCA"
+        )
+        .then((response) => (this.employees = response.data))
         .catch((error) => console.log(error));
     },
     editInventory(inventory) {
@@ -268,12 +276,12 @@ export default {
       this.$Progress.start();
       this.form
         .post("/api/inventory")
-        .then((data) => {
-          if (data.data.success) {
+        .then((response) => {
+          if (response.data.success) {
             $("#addNew").modal("hide");
             Toast.fire({
               icon: "success",
-              title: data.data.message,
+              title: response.data.message,
             });
             this.$Progress.finish();
             this.loadInventory();
@@ -336,39 +344,17 @@ export default {
         }
       });
     },
-
-    loadName(){
-      axios.get(gsheet_url).then(response => (
-        parseData(response.data.feed.entry)
-      ))
-    }
   },
   mounted() {},
   created() {
     this.$Progress.start();
     this.loadInventory();
-    this.loadCategories();
-    this.loadName();
+    this.loadCategory();
+    this.loadEmployee();
     this.$Progress.finish();
   },
 
-  computed: {
-    filteredItem() {
-      const search = this.search.toLowerCase();
-      const data = [];
-
-      this.inventories.forEach((current_page) => {
-        current_page.data.forEach((d) => {
-          const idcode = d.idcode.toLowerCase();
-
-          if (idcode.includes(search)) {
-            data.push(d);
-          }
-        });
-      });
-      return data;
-    },
-  },
+  computed: {},
   components: { DatePicker },
 };
 </script>
