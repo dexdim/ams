@@ -256,7 +256,7 @@ export default {
     loadEmployee() {
       axios
         .get(
-          "http://localhost:8000/v4/spreadsheets/1am2HvRTTYakbvjcGnKmA_ul9f2ysmi2fAfkEuGe8jqo/values/employees?key=AIzaSyDHL5Y6-8dRvfwl3D_quO1cmm6yb8NjSCA"
+          "http://sheets.googleapis.com/v4/spreadsheets/1am2HvRTTYakbvjcGnKmA_ul9f2ysmi2fAfkEuGe8jqo/values/employees?key=AIzaSyDHL5Y6-8dRvfwl3D_quO1cmm6yb8NjSCA"
         )
         .then((response) => (this.employees = response.data))
         .catch((error) => console.log(error));
