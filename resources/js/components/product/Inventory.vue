@@ -209,9 +209,7 @@ export default {
   data() {
     return {
       editmode: false,
-      columns: [{
-        label: 
-      }],
+
       inventories: [],
       search: "",
       form: new Form({
