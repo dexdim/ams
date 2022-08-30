@@ -30,11 +30,11 @@ class InventoryController extends BaseController
      */
     public function index()
     {
-        $inventories = $this->inventory->latest()->with('category')->paginate(0);
+        $inventories = $this->inventory->latest()->with('category')->paginate(20);
 
         return $this->sendResponse($inventories, 'Inventory list');
     }
-    
+
 
     /**
      * Store a newly created resource in storage.

@@ -3,10 +3,11 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-12">
-          <input type="text" placeholder="Search here" v-model="search">
+
           <div class="card">
             <div class="card-header">
               <h3 class="card-title">Inventory List</h3>
+
               <div class="card-tools">
                 <button type="button" class="btn btn-sm btn-primary" @click="newInventory" v-if="$gate.isAdmin()">
                   <i class="fa fa-plus-square"></i>
@@ -39,7 +40,7 @@
                   <tr v-for="inventory in inventories.data.data" :key="inventory.id">
                     <td>{{inventory.idcode}}</td>
                     <td>{{inventory.category.name}}</td>
-                    <td>{{inventory.description | truncate(30, '...')}}</td>
+                    <td>{{inventory.description}}</td>
                     <td>{{inventory.brand}}</td>
                     <td>{{inventory.serialnumber}}</td>
                     <td>{{inventory.supplier}}</td>
@@ -47,8 +48,8 @@
                     <td>{{inventory.purchasedate}}</td>
                     <td>{{inventory.name}}</td>
                     <td>{{inventory.status}}</td>
-                    <td>{{inventory.notes | truncate(30, '...')}}</td>
-                    <td>{{inventory.checkdate | format('DD MMMM YYYY')}}</td>
+                    <td>{{inventory.notes}}</td>
+                    <td>{{inventory.checkdate}}</td>
                     <td>{{inventory.checkedby}}</td>
                     <td v-if="$gate.isAdmin()">
                       <a href="#" @click="editInventory(inventory)">
@@ -69,7 +70,10 @@
               <pagination :data="inventories.data" @pagination-change-page="getResults"></pagination>
             </div>
           </div>
-          <pre>{{employees}}</pre>
+          <div>
+            <vue-good-table :columns="columns" :rows="inventories.data.data" />
+          </div>
+          <pre>{{items}}</pre>
           <!-- /.card -->
         </div>
       </div>
@@ -144,10 +148,8 @@
                 <div class="form-row">
                   <div class="form-group col-md-8">
                     <label>Name</label>
-                    <select class="form-control" v-model="form.fullname">
-                      <option v-for="(fullname,index) in employees" :key="index" :value="index" :selected="index == form.fullname">{{ fullname }}</option>
-                    </select>
-                    <has-error :form="form" field="fullname"></has-error>
+                    <input v-model="form.name" type="text" name="name" class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
+                    <has-error :form="form" field="name"></has-error>
                   </div>
                   <div class="form-group col-md-4">
                     <label>Status</label>
@@ -200,12 +202,17 @@
 <script>
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
+import "vue-good-table/dist/vue-good-table.css";
+import { VueGoodTable } from "vue-good-table";
 
 export default {
   data() {
     return {
       editmode: false,
-      inventories: {},
+      columns: [{
+        label: 
+      }],
+      inventories: [],
       search: "",
       form: new Form({
         id: "",
@@ -218,13 +225,13 @@ export default {
         supplier: "",
         purchasecost: "",
         purchasedate: "",
-        username: "",
+        name: "",
         status: "",
         notes: "",
         checkdate: "",
         checkedby: "",
       }),
-      categories: {},
+      categories: [],
       employees: [],
     };
   },
@@ -256,7 +263,7 @@ export default {
     loadEmployee() {
       axios
         .get(
-          "http://sheets.googleapis.com/v4/spreadsheets/1am2HvRTTYakbvjcGnKmA_ul9f2ysmi2fAfkEuGe8jqo/values/employees?key=AIzaSyDHL5Y6-8dRvfwl3D_quO1cmm6yb8NjSCA"
+          "https://sheets.googleapis.com/v4/spreadsheets/1am2HvRTTYakbvjcGnKmA_ul9f2ysmi2fAfkEuGe8jqo/values/employees?key=AIzaSyDHL5Y6-8dRvfwl3D_quO1cmm6yb8NjSCA"
         )
         .then((response) => (this.employees = response.data))
         .catch((error) => console.log(error));
@@ -284,7 +291,7 @@ export default {
               title: response.data.message,
             });
             this.$Progress.finish();
-            this.loadInventory();
+            this.loadItems();
           } else {
             Toast.fire({
               icon: "error",
@@ -354,7 +361,17 @@ export default {
     this.$Progress.finish();
   },
 
-  computed: {},
-  components: { DatePicker },
+  computed: {
+    filteredItems() {
+      return this.items.filter((item) => {
+        const idcode = item.idcode.toString().toLowerCase();
+        const username = item.username.toString.toLowerCase();
+        const result = this.search.toLowerCase();
+
+        return idcode.includes(result) || username.includes(result);
+      });
+    },
+  },
+  components: { DatePicker, VueGoodTable },
 };
 </script>
