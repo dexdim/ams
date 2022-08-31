@@ -73,7 +73,7 @@
           <div>
             <vue-good-table :columns="columns" :rows="inventories.data.data" />
           </div>
-          <pre>{{items}}</pre>
+          <pre>{{employees}}</pre>
           <!-- /.card -->
         </div>
       </div>
