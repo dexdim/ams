@@ -47,6 +47,7 @@ Vue.component(AlertError.name, AlertError);
 import VueRouter from "vue-router";
 Vue.use(VueRouter);
 import routes from "./routes";
+import Vue from "vue";
 
 const router = new VueRouter({
     mode: "history",
@@ -93,6 +94,8 @@ Vue.filter("yesno", (value) =>
         : '<i class="fas fa-times red"></i>'
 );
 
+window.Fire = new Vue();
+
 // end Filter
 
 Vue.component(
@@ -103,4 +106,12 @@ Vue.component(
 const app = new Vue({
     el: "#app",
     router,
+    data: {
+        search: "",
+    },
+    methods: {
+        searchit() {
+            Fire.$emit('searching')
+        },
+    },
 });

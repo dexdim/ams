@@ -32,6 +32,7 @@ Route::namespace('App\\Http\\Controllers\\API\V1')->group(function () {
     Route::post('change-password', 'ProfileController@changePassword');
     Route::get('category/list', 'CategoryController@list');
     Route::get('user/list', 'UserController@list');
+    Route::get('findItem', 'InventoryController@search');
 
     Route::apiResources([
         'user' => 'UserController',

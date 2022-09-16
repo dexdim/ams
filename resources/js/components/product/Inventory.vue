@@ -353,6 +353,11 @@ export default {
   mounted() {},
   created() {
     this.$Progress.start();
+    Fire.$on("searching", () => {
+      let query = this.$parent.search;
+      axios.get("api/findItem?q=" + query)
+      .then(({ data }) => (this.inventories = data))
+    });
     this.loadInventory();
     this.loadCategory();
     this.loadEmployee();
