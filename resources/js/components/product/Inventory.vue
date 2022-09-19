@@ -37,7 +37,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="inventory in inventories.data.data" :key="inventory.id">
+                  <tr v-for="inventory in inventories.data" :key="inventory.id">
                     <td>{{inventory.idcode}}</td>
                     <td>{{inventory.category.name}}</td>
                     <td>{{inventory.description}}</td>
@@ -70,10 +70,6 @@
               <pagination :data="inventories.data" @pagination-change-page="getResults"></pagination>
             </div>
           </div>
-          <div>
-            <vue-good-table :columns="columns" :rows="inventories.data.data" />
-          </div>
-          <pre>{{employees}}</pre>
           <!-- /.card -->
         </div>
       </div>
@@ -248,7 +244,7 @@ export default {
       // if(this.$gate.isAdmin()){
       axios
         .get("/api/inventory")
-        .then(({ data }) => (this.inventories = data))
+        .then(({ data }) => (this.inventories = data.data))
         .catch((error) => console.log(error));
       // }
     },
@@ -355,8 +351,9 @@ export default {
     this.$Progress.start();
     Fire.$on("searching", () => {
       let query = this.$parent.search;
-      axios.get("api/findItem?q=" + query)
-      .then(({ data }) => (this.inventories = data))
+      axios
+        .get("api/findItem?q=" + query)
+        .then(({ data }) => (this.inventories = data));
     });
     this.loadInventory();
     this.loadCategory();
