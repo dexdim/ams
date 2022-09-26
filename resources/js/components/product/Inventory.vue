@@ -24,11 +24,8 @@
                     <th>Category</th>
                     <th>Description</th>
                     <th>Brand</th>
-                    <th>Serial Number</th>
-                    <th>Supplier</th>
-                    <th>Purchase Cost</th>
-                    <th>Purchase Date</th>
                     <th>Name</th>
+                    <th>Email</th>
                     <th>Status</th>
                     <th>Notes</th>
                     <th>Check Date</th>
@@ -42,11 +39,8 @@
                     <td>{{inventory.category.name}}</td>
                     <td>{{inventory.description}}</td>
                     <td>{{inventory.brand}}</td>
-                    <td>{{inventory.serialnumber}}</td>
-                    <td>{{inventory.supplier}}</td>
-                    <td>{{inventory.purchasecost}}</td>
-                    <td>{{inventory.purchasedate}}</td>
                     <td>{{inventory.name}}</td>
+                    <td>{{inventory.email}}</td>
                     <td>{{inventory.status}}</td>
                     <td>{{inventory.notes}}</td>
                     <td>{{inventory.checkdate}}</td>
@@ -143,8 +137,10 @@
 
                 <div class="form-row">
                   <div class="form-group col-md-8">
-                    <label>Name</label>
-                    <input v-model="form.name" type="text" name="name" class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
+                    <label>Full Name</label>
+                    <select class="form-control" v-model="form.name">
+                      <option v-for="(emp,index) in employees.data" :key="index" :value="index" :selected="index == form.name_id">{{ emp }}</option>
+                    </select>
                     <has-error :form="form" field="name"></has-error>
                   </div>
                   <div class="form-group col-md-4">
@@ -220,6 +216,7 @@ export default {
         purchasecost: "",
         purchasedate: "",
         name: "",
+        email: "",
         status: "",
         notes: "",
         checkdate: "",
@@ -256,9 +253,7 @@ export default {
     },
     loadEmployee() {
       axios
-        .get(
-          "https://sheets.googleapis.com/v4/spreadsheets/1am2HvRTTYakbvjcGnKmA_ul9f2ysmi2fAfkEuGe8jqo/values/employees?key=AIzaSyDHL5Y6-8dRvfwl3D_quO1cmm6yb8NjSCA"
-        )
+        .get("/api/employee/list")
         .then((response) => (this.employees = response.data))
         .catch((error) => console.log(error));
     },
@@ -349,15 +344,15 @@ export default {
   mounted() {},
   created() {
     this.$Progress.start();
+    this.loadInventory();
+    this.loadCategory();
+    this.loadEmployee();
     Fire.$on("searching", () => {
       let query = this.$parent.search;
       axios
         .get("api/findItem?q=" + query)
         .then(({ data }) => (this.inventories = data));
     });
-    this.loadInventory();
-    this.loadCategory();
-    this.loadEmployee();
     this.$Progress.finish();
   },
 

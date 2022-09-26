@@ -58,12 +58,12 @@ class CategoryController extends BaseController
      */
     public function store(Request $request)
     {
-        $tag = $this->category->create([
+        $categories = $this->category->create([
             'name' => $request->get('name'),
             'description' => $request->get('description'),
         ]);
 
-        return $this->sendResponse($tag, 'Category Created Successfully');
+        return $this->sendResponse($categories, 'Category Created Successfully');
     }
 
     /**
@@ -76,11 +76,11 @@ class CategoryController extends BaseController
      */
     public function update(Request $request, $id)
     {
-        $tag = $this->category->findOrFail($id);
+        $categories = $this->category->findOrFail($id);
 
-        $tag->update($request->all());
+        $categories->update($request->all());
 
-        return $this->sendResponse($tag, 'Category Information has been updated');
+        return $this->sendResponse($categories, 'Category Information has been updated');
     }
 
     /**
@@ -93,10 +93,10 @@ class CategoryController extends BaseController
 
         $this->authorize('isAdmin');
 
-        $inventory = $this->inventory->findOrFail($id);
+        $categories = $this->category->findOrFail($id);
 
-        $inventory->delete();
+        $categories->delete();
 
-        return $this->sendResponse($inventory, 'Inventory has been deleted');
+        return $this->sendResponse([$categories], 'Category has been deleted');
     }
 }

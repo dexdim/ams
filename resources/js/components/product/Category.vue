@@ -189,7 +189,7 @@ export default {
         });
     },
 
-    deleteCategory() {
+    deleteCategory(id) {
       Swal.fire({
         title: "Are you sure?",
         text: "You won't be able to revert this!",
@@ -201,9 +201,9 @@ export default {
         // Send request to the server
         if (result.value) {
           this.form
-            .delete("api/catagory/" + id)
+            .delete("api/category/" + id)
             .then(() => {
-              Swal.fire("Deleted!", "Your record has been deleted.", "success");
+              Swal.fire("Deleted!", "Category has been deleted.", "success");
               // Fire.$emit('AfterCreate');
               this.loadCategories();
             })

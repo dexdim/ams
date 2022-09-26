@@ -196,7 +196,7 @@ export default {
           this.form
             .delete("api/user/" + id)
             .then(() => {
-              Swal.fire("Deleted!", "Your file has been deleted.", "success");
+              Swal.fire("Deleted!", "User has been deleted.", "success");
               // Fire.$emit('AfterCreate');
               this.loadUsers();
             })

@@ -33,10 +33,12 @@ Route::namespace('App\\Http\\Controllers\\API\V1')->group(function () {
     Route::get('category/list', 'CategoryController@list');
     Route::get('user/list', 'UserController@list');
     Route::get('findItem', 'InventoryController@search');
+    Route::get('employee/list', 'EmployeeController@list');
 
     Route::apiResources([
         'user' => 'UserController',
         'inventory' => 'InventoryController',
         'category' => 'CategoryController',
+        'employee' => 'EmployeeController'
     ]);
 });

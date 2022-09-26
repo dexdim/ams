@@ -119,10 +119,12 @@ class InventoryController extends BaseController
             $inventories = Inventory::where(function ($query) use ($search) {
                 $query->where('idcode', 'LIKE', "%$search%")
                     ->orWhere('category', 'LIKE', "%$search%")
+                    ->orWhere('description', 'LIKE', "%$search%")
                     ->orWhere('name', 'LIKE', "%$search%")
+                    ->orWhere('email', 'LIKE', "%$search%")
                     ->orWhere('status', 'LIKE', "%$search%")
-                    ->orWhere('description', 'LIKE', "%$search%");
-                    
+                    ->orWhere('history', 'LIKE', "%$search%");
+
             })->paginate(20);
         } else {
             $inventories = Inventory::latest()->with('category')->paginate(20);
