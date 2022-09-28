@@ -3,11 +3,9 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-12">
-
           <div class="card">
             <div class="card-header">
               <h3 class="card-title">Inventory List</h3>
-
               <div class="card-tools">
                 <button type="button" class="btn btn-sm btn-primary" @click="newInventory" v-if="$gate.isAdmin()">
                   <i class="fa fa-plus-square"></i>
@@ -17,32 +15,30 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body table-responsive p-0">
-              <table class="table table-hover">
-                <thead>
+              <table class=" table table-hover table-bordered">
+                <thead class="thead-dark">
                   <tr>
                     <th>ID Code</th>
+                    <th>QR</th>
                     <th>Category</th>
                     <th>Description</th>
-                    <th>Brand</th>
-                    <th>Name</th>
                     <th>Email</th>
                     <th>Status</th>
-                    <th>Notes</th>
-                    <th>Check Date</th>
-                    <th>Checked By</th>
+                    <th>User History</th>
+                    <th>Date</th>
+                    <th>PIC</th>
                     <th v-if="$gate.isAdmin()">Action</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr v-for="inventory in inventories.data" :key="inventory.id">
                     <td>{{inventory.idcode}}</td>
+                    <td><img :src="'https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl='+inventory.idcode" width="30px"></td>
                     <td>{{inventory.category.name}}</td>
                     <td>{{inventory.description}}</td>
-                    <td>{{inventory.brand}}</td>
-                    <td>{{inventory.name}}</td>
                     <td>{{inventory.email}}</td>
                     <td>{{inventory.status}}</td>
-                    <td>{{inventory.notes}}</td>
+                    <td>{{inventory.history}}</td>
                     <td>{{inventory.checkdate}}</td>
                     <td>{{inventory.checkedby}}</td>
                     <td v-if="$gate.isAdmin()">
@@ -57,11 +53,12 @@
                   </tr>
                 </tbody>
               </table>
+
             </div>
 
             <!-- /.card-body -->
             <div class="card-footer">
-              <pagination :data="inventories.data" @pagination-change-page="getResults"></pagination>
+              <pagination :data="inventories" @pagination-change-page="getResults"></pagination>
             </div>
           </div>
           <!-- /.card -->
@@ -128,20 +125,10 @@
                     <input v-model="form.purchasecost" type="text" name="purchasecost" class="form-control" :class="{ 'is-invalid': form.errors.has('purchasecost') }">
                     <has-error :form="form" field="purchasecost"></has-error>
                   </div>
-                  <div class="form-group col-md-4">
+                  <div class="form-group col-md-4 clearfix">
                     <label>Purchase Date</label>
                     <date-picker format="DD MMMM YYYY" v-model="form.purchasedate" name="purchasedate" class="form-control" :class="{ 'is-invalid': form.errors.has('purchasedate') }"></date-picker>
                     <has-error :form="form" field="purchasedate"></has-error>
-                  </div>
-                </div>
-
-                <div class="form-row">
-                  <div class="form-group col-md-8">
-                    <label>Full Name</label>
-                    <select class="form-control" v-model="form.name">
-                      <option v-for="(emp,index) in employees.data" :key="index" :value="index" :selected="index == form.name_id">{{ emp }}</option>
-                    </select>
-                    <has-error :form="form" field="name"></has-error>
                   </div>
                   <div class="form-group col-md-4">
                     <label>Status</label>
@@ -149,8 +136,39 @@
                       <option>Storage</option>
                       <option>Deployed</option>
                       <option>Broken</option>
+                      <option>Sold</option>
                     </select>
                     <has-error :form="form" field="status"></has-error>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label>User</label>
+                    <select class="form-control" v-model="form.name">
+                      <option>-</option>
+                      <option v-for="(emp,index) in employees.data" :key="index" :value="emp" :selected="index == form.name">{{ emp }}</option>
+                    </select>
+                    <has-error :form="form" field="name"></has-error>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label>Email</label>
+                    <select class="form-control" v-model="form.email">
+                      <option>-</option>
+                      <option v-for="(emp,index) in employees.data" :key="index" :value="index" :selected="index == form.email">{{ emp }}</option>
+                    </select>
+                    <has-error :form="form" field="email"></has-error>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group col-md-8">
+                    <label>User History</label>
+                    <select class="form-control" v-model="form.history">
+                      <option>-</option>
+                      <option v-for="(emp,index) in employees.data" :key="index" :value="index" :selected="index == form.history">{{ emp }}</option>
+                    </select>
+                    <has-error :form="form" field="history"></has-error>
                   </div>
                 </div>
 
@@ -194,16 +212,14 @@
 <script>
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
-import "vue-good-table/dist/vue-good-table.css";
-import { VueGoodTable } from "vue-good-table";
 
 export default {
   data() {
     return {
       editmode: false,
 
-      inventories: [],
-      search: "",
+      inventories: {},
+      search: null,
       form: new Form({
         id: "",
         idcode: "",
@@ -219,6 +235,7 @@ export default {
         email: "",
         status: "",
         notes: "",
+        history: "",
         checkdate: "",
         checkedby: "",
       }),
@@ -232,7 +249,7 @@ export default {
 
       axios
         .get("/api/inventory?page=" + page)
-        .then(({ data }) => (this.inventories = data))
+        .then(({ data }) => (this.inventories = data.data))
         .catch((error) => console.log(error));
 
       this.$Progress.finish();
@@ -254,7 +271,7 @@ export default {
     loadEmployee() {
       axios
         .get("/api/employee/list")
-        .then((response) => (this.employees = response.data))
+        .then(({ data }) => (this.employees = data))
         .catch((error) => console.log(error));
     },
     editInventory(inventory) {
@@ -367,6 +384,6 @@ export default {
       });
     },
   },
-  components: { DatePicker, VueGoodTable },
+  components: { DatePicker },
 };
 </script>

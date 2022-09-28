@@ -56,6 +56,7 @@ class InventoryController extends BaseController
             'purchasecost' => $request->get('purchasecost'),
             'purchasedate' => $request->get('purchasedate'),
             'name' => $request->get('name'),
+            'email' => $request->get('email'),
             'status' => $request->get('status'),
             'notes' => $request->get('notes'),
             'checkdate' => $request->get('checkdate'),
@@ -125,9 +126,7 @@ class InventoryController extends BaseController
                     ->orWhere('status', 'LIKE', "%$search%")
                     ->orWhere('history', 'LIKE', "%$search%");
 
-            })->paginate(20);
-        } else {
-            $inventories = Inventory::latest()->with('category')->paginate(20);
+            })->latest()->with('category')->paginate(20);
         }
 
         return $inventories;

@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class EmployeeController extends BaseController
 {
-    protected $category = '';
+    protected $employee = '';
 
     /**
      * Create a new controller instance.
