@@ -58,7 +58,7 @@
 
             <!-- /.card-body -->
             <div class="card-footer">
-              <pagination :data="inventories" @pagination-change-page="getResults"></pagination>
+              <pagination pagination-sm :data="inventories" @pagination-change-page="getResults" max-size="10"></pagination>
             </div>
           </div>
           <!-- /.card -->
