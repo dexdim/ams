@@ -5,8 +5,11 @@
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">Inventory List</h3>
-              <div class="card-tools">
+              <download-csv class="btn btn-sm btn-primary" :data="inventories.data" name="export.csv">
+                Download CSV
+              </download-csv>
+              <div class=" card-tools">
+
                 <button type="button" class="btn btn-sm btn-primary" @click="newInventory" v-if="$gate.isAdmin()">
                   <i class="fa fa-plus-square"></i>
                   Add New
@@ -58,7 +61,7 @@
 
             <!-- /.card-body -->
             <div class="card-footer">
-              <pagination pagination-sm :data="inventories" @pagination-change-page="getResults" max-size="10"></pagination>
+              <pagination pagination :data="inventories" @pagination-change-page="getResults" max-size="10"></pagination>
             </div>
           </div>
           <!-- /.card -->
@@ -204,6 +207,7 @@
           </div>
         </div>
       </div>
+      <pre>{{ inventories.data }}</pre>>
     </div>
   </section>
 </template>
@@ -212,6 +216,7 @@
 <script>
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
+import JsonCSV from "vue-json-csv";
 
 export default {
   data() {
@@ -384,6 +389,6 @@ export default {
       });
     },
   },
-  components: { DatePicker },
+  components: { JsonCSV, DatePicker },
 };
 </script>
