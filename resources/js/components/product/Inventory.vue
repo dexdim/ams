@@ -25,9 +25,9 @@
                     <th>QR</th>
                     <th>Category</th>
                     <th>Description</th>
+                    <th>User</th>
                     <th>Email</th>
                     <th>Status</th>
-                    <th>User History</th>
                     <th>Date</th>
                     <th>PIC</th>
                     <th v-if="$gate.isAdmin()">Action</th>
@@ -39,9 +39,9 @@
                     <td><img :src="'https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl='+inventory.idcode" width="30px"></td>
                     <td>{{inventory.category.name}}</td>
                     <td>{{inventory.description}}</td>
+                    <td>{{inventory.name}}</td>
                     <td>{{inventory.email}}</td>
                     <td>{{inventory.status}}</td>
-                    <td>{{inventory.history}}</td>
                     <td>{{inventory.checkdate}}</td>
                     <td>{{inventory.checkedby}}</td>
                     <td v-if="$gate.isAdmin()">
@@ -302,7 +302,7 @@ export default {
               title: response.data.message,
             });
             this.$Progress.finish();
-            this.loadItems();
+            this.loadInventory();
           } else {
             Toast.fire({
               icon: "error",

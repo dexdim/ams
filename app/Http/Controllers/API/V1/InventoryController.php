@@ -30,7 +30,7 @@ class InventoryController extends BaseController
      */
     public function index()
     {
-        $inventories = $this->inventory->latest()->paginate(10);
+        $inventories = $this->inventory->latest()->with('category')->paginate(50);
 
         return $this->sendResponse($inventories, 'Inventory list');
     }
@@ -45,7 +45,7 @@ class InventoryController extends BaseController
     public function store(InventoryRequest $request)
     {
 
-        $inventories = $this->inventory->create([
+        $inventory = $this->inventory->create([
 
             'idcode' => $request->get('idcode'),
             'category_id' => $request->get('category_id'),
@@ -58,12 +58,13 @@ class InventoryController extends BaseController
             'name' => $request->get('name'),
             'email' => $request->get('email'),
             'status' => $request->get('status'),
+            'history' => $request->get('history'),
             'notes' => $request->get('notes'),
             'checkdate' => $request->get('checkdate'),
             'checkedby' => $request->get('checkedby'),
         ]);
 
-        return $this->sendResponse($inventories, 'Inventory created successfully');
+        return $this->sendResponse($inventory, 'Inventory created successfully');
     }
 
     /**
@@ -126,7 +127,7 @@ class InventoryController extends BaseController
                     ->orWhere('status', 'LIKE', "%$search%")
                     ->orWhere('history', 'LIKE', "%$search%");
 
-            })->latest()->with('category')->paginate(20);
+            })->latest()->with('category')->paginate(100);
         }
 
         return $inventories;

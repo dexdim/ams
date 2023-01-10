@@ -20,6 +20,12 @@ class ExportController implements FromCollection
 
     public function export(){
 
-    return Excel::download(new Export, 'export.xlsx');
+    /*return Excel::download(new Export, 'export.xlsx');*/
+
+    $inventories = $this->inventory->latest()->with('category')->paginate(50);
+
+    return $this->sendResponse($inventories, 'Inventory list');
+
+
 }
 }
