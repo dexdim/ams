@@ -5,16 +5,15 @@
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <download-csv class="btn btn-sm btn-primary" :data="inventories.data" name="export.csv">
-                Download CSV
-              </download-csv>
-              <div class=" card-tools">
-
-                <button type="button" class="btn btn-sm btn-primary" @click="newInventory" v-if="$gate.isAdmin()">
-                  <i class="fa fa-plus-square"></i>
-                  Add New
-                </button>
-              </div>
+                <download-excel :data="all" class="btn btn-sm btn-primary">
+                    Download CSV
+                </download-excel>
+                <div class=" card-tools">
+                    <button type="button" class="btn btn-sm btn-primary" @click="newInventory" v-if="$gate.isAdmin()">
+                        <i class="fa fa-plus-square"></i>
+                            Add New
+                    </button>
+                </div>
             </div>
             <!-- /.card-header -->
             <div class="card-body table-responsive p-0">
@@ -61,7 +60,7 @@
 
             <!-- /.card-body -->
             <div class="card-footer">
-              <pagination pagination :data="inventories" @pagination-change-page="getResults" max-size="10"></pagination>
+              <pagination :data="inventories" @pagination-change-page="getResults" :limit=25></pagination>
             </div>
           </div>
           <!-- /.card -->
@@ -207,7 +206,7 @@
           </div>
         </div>
       </div>
-      <pre>{{ inventories.data }}</pre>>
+      <pre></pre>
     </div>
   </section>
 </template>
@@ -216,7 +215,6 @@
 <script>
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
-import JsonCSV from "vue-json-csv";
 
 export default {
   data() {
@@ -224,6 +222,7 @@ export default {
       editmode: false,
 
       inventories: {},
+      all: [],
       search: null,
       form: new Form({
         id: "",
@@ -244,8 +243,8 @@ export default {
         checkdate: "",
         checkedby: "",
       }),
-      categories: [],
-      employees: [],
+      categories: {},
+      employees: {},
     };
   },
   methods: {
@@ -254,16 +253,26 @@ export default {
 
       axios
         .get("/api/inventory?page=" + page)
-        .then(({ data }) => (this.inventories = data.data))
+        .then(( {data} ) => (this.inventories = data.data))
         .catch((error) => console.log(error));
 
       this.$Progress.finish();
     },
+
+    loadAll() {
+      // if(this.$gate.isAdmin()){
+      axios
+        .get("/api/inventory/all")
+        .then(( data ) => (this.all = data.data.data))
+        .catch((error) => console.log(error));
+      // }
+    },
+
     loadInventory() {
       // if(this.$gate.isAdmin()){
       axios
         .get("/api/inventory")
-        .then(({ data }) => (this.inventories = data.data))
+        .then(( {data} ) => (this.inventories = data.data))
         .catch((error) => console.log(error));
       // }
     },
@@ -366,6 +375,7 @@ export default {
   mounted() {},
   created() {
     this.$Progress.start();
+    this.loadAll();
     this.loadInventory();
     this.loadCategory();
     this.loadEmployee();
@@ -389,6 +399,6 @@ export default {
       });
     },
   },
-  components: { JsonCSV, DatePicker },
+  components: { DatePicker },
 };
 </script>

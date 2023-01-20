@@ -35,6 +35,11 @@ class InventoryController extends BaseController
         return $this->sendResponse($inventories, 'Inventory list');
     }
 
+    public function all(){
+        $inventories = $this->inventory->all();
+
+        return $this->sendResponse($inventories, 'All inventory list');
+    }
 
     /**
      * Store a newly created resource in storage.
