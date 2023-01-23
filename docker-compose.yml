@@ -1,5 +1,21 @@
 version: '3.1'
 services:
+  traefik:
+    image: "traefik:v2.8"
+    container_name: "traefik"
+    restart: always
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    networks:
+      - app-network
 
   #PHP Service
   app:
@@ -25,8 +41,12 @@ services:
     container_name: vue-starter-webserver
     restart: always
     tty: true
-    ports:
-      - "8008:80"
+    labels:
+      - "traefik.enable=true"
+      - traefik.http.routers.webserver.rule=Host(`192.168.1.236`)
+      - traefik.http.services.webserver.loadbalancer.server.port=80
+    # ports:
+    #   - "8008:80"
         #  - "4431:443"
     volumes:
       - ./:/var/www
@@ -36,16 +56,16 @@ services:
 
   #MySQL Service
   db:
-    image: mysql:8.1.77
+    image: mysql:8.0.17
     container_name: vue-starter-db
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     tty: true
-    ports:
-      - "3307:3306"
+      #ports:
+      #- "3307:3306"
     environment:
-      MYSQL_DATABASE: ams
-      MYSQL_ROOT_PASSWORD: aa324236
+      MYSQL_DATABASE: laravel
+      MYSQL_ROOT_PASSWORD: mlDt1vHNM3Dyy046kbgdUAgDO1mT82JW
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
     volumes:
@@ -57,8 +77,15 @@ services:
   adminer:
     image: adminer:latest
     restart: unless-stopped
-    ports:
-      - 8080:8080
+    labels:
+      - "traefik.enable=true"
+      - traefik.http.routers.adminer.rule=Host(`db.remote`)
+      - traefik.http.services.adminer.loadbalancer.server.port=8080
+    # ports:
+    #   - 8080:8080
+    networks:
+      - app-network
+
 
 #Docker Networks
 networks:
