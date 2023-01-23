@@ -5,13 +5,15 @@
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">Inventory List</h3>
-              <div class="card-tools">
-                <button type="button" class="btn btn-sm btn-primary" @click="newInventory" v-if="$gate.isAdmin()">
-                  <i class="fa fa-plus-square"></i>
-                  Add New
-                </button>
-              </div>
+                <download-excel :data="all" class="btn btn-sm btn-primary">
+                    Download CSV
+                </download-excel>
+                <div class=" card-tools">
+                    <button type="button" class="btn btn-sm btn-primary" @click="newInventory" v-if="$gate.isAdmin()">
+                        <i class="fa fa-plus-square"></i>
+                            Add New
+                    </button>
+                </div>
             </div>
             <!-- /.card-header -->
             <div class="card-body table-responsive p-0">
@@ -22,9 +24,9 @@
                     <th>QR</th>
                     <th>Category</th>
                     <th>Description</th>
+                    <th>User</th>
                     <th>Email</th>
                     <th>Status</th>
-                    <th>User History</th>
                     <th>Date</th>
                     <th>PIC</th>
                     <th v-if="$gate.isAdmin()">Action</th>
@@ -36,9 +38,9 @@
                     <td><img :src="'https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl='+inventory.idcode" width="30px"></td>
                     <td>{{inventory.category.name}}</td>
                     <td>{{inventory.description}}</td>
+                    <td>{{inventory.name}}</td>
                     <td>{{inventory.email}}</td>
                     <td>{{inventory.status}}</td>
-                    <td>{{inventory.history}}</td>
                     <td>{{inventory.checkdate}}</td>
                     <td>{{inventory.checkedby}}</td>
                     <td v-if="$gate.isAdmin()">
@@ -58,7 +60,7 @@
 
             <!-- /.card-body -->
             <div class="card-footer">
-              <pagination :data="inventories" @pagination-change-page="getResults"></pagination>
+              <pagination :data="inventories" @pagination-change-page="getResults" :limit=25></pagination>
             </div>
           </div>
           <!-- /.card -->
@@ -204,6 +206,7 @@
           </div>
         </div>
       </div>
+      <pre></pre>
     </div>
   </section>
 </template>
@@ -219,6 +222,7 @@ export default {
       editmode: false,
 
       inventories: {},
+      all: [],
       search: null,
       form: new Form({
         id: "",
@@ -239,8 +243,8 @@ export default {
         checkdate: "",
         checkedby: "",
       }),
-      categories: [],
-      employees: [],
+      categories: {},
+      employees: {},
     };
   },
   methods: {
@@ -249,16 +253,26 @@ export default {
 
       axios
         .get("/api/inventory?page=" + page)
-        .then(({ data }) => (this.inventories = data.data))
+        .then(( {data} ) => (this.inventories = data.data))
         .catch((error) => console.log(error));
 
       this.$Progress.finish();
     },
+
+    loadAll() {
+      // if(this.$gate.isAdmin()){
+      axios
+        .get("/api/inventory/all")
+        .then(( data ) => (this.all = data.data.data))
+        .catch((error) => console.log(error));
+      // }
+    },
+
     loadInventory() {
       // if(this.$gate.isAdmin()){
       axios
         .get("/api/inventory")
-        .then(({ data }) => (this.inventories = data.data))
+        .then(( {data} ) => (this.inventories = data.data))
         .catch((error) => console.log(error));
       // }
     },
@@ -297,7 +311,7 @@ export default {
               title: response.data.message,
             });
             this.$Progress.finish();
-            this.loadItems();
+            this.loadInventory();
           } else {
             Toast.fire({
               icon: "error",
@@ -361,6 +375,7 @@ export default {
   mounted() {},
   created() {
     this.$Progress.start();
+    this.loadAll();
     this.loadInventory();
     this.loadCategory();
     this.loadEmployee();

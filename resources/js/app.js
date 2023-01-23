@@ -48,6 +48,7 @@ import VueRouter from "vue-router";
 Vue.use(VueRouter);
 import routes from "./routes";
 import Vue from "vue";
+import JsonExcel from "vue-json-excel";
 
 const router = new VueRouter({
     mode: "history",
@@ -64,6 +65,7 @@ const router = new VueRouter({
 // Components
 Vue.component("pagination", require("laravel-vue-pagination"));
 Vue.component("dashboard", require("./components/Dashboard.vue"));
+Vue.component("downloadExcel", JsonExcel);
 
 Vue.component(
     "passport-clients",
