@@ -150,6 +150,8 @@
                     <label>User</label>
                     <select class="form-control" v-model="form.name">
                       <option>-</option>
+                      <option>Miguel Garcia</option>
+                      <option>Marlene Maria Angela Benedict</option>
                       <option v-for="(emp,index) in employees.data" :key="index" :value="emp" :selected="index == form.name">{{ emp }}</option>
                     </select>
                     <has-error :form="form" field="name"></has-error>
@@ -158,6 +160,8 @@
                     <label>Email</label>
                     <select class="form-control" v-model="form.email">
                       <option>-</option>
+                      <option>miguel@hostinger.com</option>
+                      <option>marlene.benedict@hostinger.com</option>
                       <option v-for="(emp,index) in employees.data" :key="index" :value="index" :selected="index == form.email">{{ emp }}</option>
                     </select>
                     <has-error :form="form" field="email"></has-error>
@@ -169,6 +173,8 @@
                     <label>User History</label>
                     <select class="form-control" v-model="form.history">
                       <option>-</option>
+                      <option>Miguel Garcia</option>
+                      <option>Marlene Maria Angela Benedict</option>
                       <option v-for="(emp,index) in employees.data" :key="index" :value="index" :selected="index == form.history">{{ emp }}</option>
                     </select>
                     <has-error :form="form" field="history"></has-error>
