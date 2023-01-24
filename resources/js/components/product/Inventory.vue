@@ -139,6 +139,7 @@
                       <option>Deployed</option>
                       <option>Broken</option>
                       <option>Sold</option>
+                      <option>Working</option>
                     </select>
                     <has-error :form="form" field="status"></has-error>
                   </div>
