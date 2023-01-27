@@ -11,9 +11,9 @@
 ## Features
 
 -   Modal based Create+Edit, List with Pagination, Delete with Sweetalert
--   Login, Register, Forget+Reset Password as default auth
--   Profile, Update Profile, Change Password, Avatar
--   Product Management
+-   Login, Register, Forget + Reset Password as default auth
+-   Profile, Update Profile, Change Password
+-   Inventory Management
 -   User Management
 -   Settings: Categories
 -   Frontend and Backend User ACL with Gate Policy (type: admin/user)
