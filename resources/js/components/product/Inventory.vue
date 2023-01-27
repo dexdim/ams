@@ -8,7 +8,8 @@
                 <download-excel :data="all" class="btn btn-sm btn-primary">
                     Download CSV
                 </download-excel>
-                <div class=" card-tools">
+
+                <div class="card-tools">
                     <button type="button" class="btn btn-sm btn-primary" @click="newInventory" v-if="$gate.isAdmin()">
                         <i class="fa fa-plus-square"></i>
                             Add New
