@@ -121,7 +121,8 @@ export default {
 
       axios
         .get("/api/category?page=" + page)
-        .then(({ data }) => (this.categories = data.data));
+        .then(({data}) => (this.categories = data.data))
+        .catch((error) => console.log(error));
 
       this.$Progress.finish();
     },

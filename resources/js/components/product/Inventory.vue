@@ -261,7 +261,7 @@ export default {
 
       axios
         .get("/api/inventory?page=" + page)
-        .then(( {data} ) => (this.inventories = data.data))
+        .then(({data}) => (this.inventories = data.data))
         .catch((error) => console.log(error));
 
       this.$Progress.finish();
