@@ -127,6 +127,7 @@ class InventoryController extends BaseController
                 $query->where('idcode', 'LIKE', "%$search%")
                     ->orWhere('category', 'LIKE', "%$search%")
                     ->orWhere('description', 'LIKE', "%$search%")
+                    ->orWhere('serialnumber', 'LIKE', "%$search%")
                     ->orWhere('name', 'LIKE', "%$search%")
                     ->orWhere('email', 'LIKE', "%$search%")
                     ->orWhere('status', 'LIKE', "%$search%")
@@ -137,4 +138,12 @@ class InventoryController extends BaseController
 
         return $inventories;
     }
+
+    public function duplicate($id)
+    {
+        $record = Inventory::find($id);
+        $duplicate = $record->replicate();
+        $duplicate->push();
+    }
+
 }

@@ -35,6 +35,7 @@ Route::namespace('App\\Http\\Controllers\\API\V1')->group(function () {
     Route::get('findItem', 'InventoryController@search');
     Route::get('employee/list', 'EmployeeController@list');
     Route::get('inventory/all', 'InventoryController@all');
+    Route::post('inventory/duplicate/{id}', 'InventoryController@duplicate');
 
     Route::apiResources([
         'user' => 'UserController',

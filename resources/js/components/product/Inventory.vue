@@ -18,17 +18,17 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body table-responsive p-0">
-              <table class=" table table-hover table-bordered">
+              <table class=" table table-hover table-bordered table-condensed">
                 <thead class="thead-dark">
                   <tr>
                     <th>ID Code</th>
-                    <th>QR</th>
-                    <th>Category</th>
-                    <th>Description</th>
-                    <th>User</th>
-                    <th>Email</th>
+                    <th width="5%">QR</th>
+                    <th width="5%">Category</th>
+                    <th width="25%">Description</th>
+                    <th width="15%">User</th>
+                    <th width="15%">Email</th>
                     <th>Status</th>
-                    <th>Date</th>
+                    <th width="10%">Date</th>
                     <th>PIC</th>
                     <th v-if="$gate.isAdmin()">Action</th>
                   </tr>
@@ -48,7 +48,9 @@
                       <a href="#" @click="editInventory(inventory)">
                         <i class="fa fa-edit blue"></i>
                       </a>
-                      /
+                      <a href="#" @click="duplicateInventory(inventory.id)">
+                        <i class="fa fa-copy green"></i>
+                      </a>
                       <a href="#" @click="deleteInventory(inventory.id)">
                         <i class="fa fa-trash red"></i>
                       </a>
@@ -370,6 +372,30 @@ export default {
             .delete("api/inventory/" + id)
             .then(() => {
               Swal.fire("Deleted!", "Your record has been deleted.", "success");
+              // Fire.$emit('AfterCreate');
+              this.loadInventory();
+            })
+            .catch((data) => {
+              Swal.fire("Failed!", data.message, "warning");
+            });
+        }
+      });
+    },
+    duplicateInventory(id) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You will duplicate a record of this row",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, duplicate it!",
+      }).then((result) => {
+        // Send request to the server
+        if (result.value) {
+          this.form
+            .post("api/inventory/duplicate/" + id)
+            .then(() => {
+              Swal.fire("Duplicated!", "Your record has been duplicated.", "success");
               // Fire.$emit('AfterCreate');
               this.loadInventory();
             })
