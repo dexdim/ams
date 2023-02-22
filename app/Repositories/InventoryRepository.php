@@ -2,18 +2,18 @@
 
 namespace App\Repositories;
 
-use App\Models\Product;
-use App\Repositories\ProductRepositoryInterface;
+use App\Models\Inventory;
+use App\Repositories\InventoryRepositoryInterface;
 use Illuminate\Database\Eloquent\Model;
 
-class ProductRepository implements ProductRepositoryInterface
+class InventoryRepository implements InventoryRepositoryInterface
 {
 
     protected $model;
 
-    public function __construct(Product $product)
+    public function __construct(Inventory $inventory)
     {
-        $this->model = $product;
+        $this->model = $inventory;
     }
 
     /**
@@ -150,7 +150,7 @@ class ProductRepository implements ProductRepositoryInterface
 
     /**
      * On method call
-     * To use Eloquent Methods which are not exist on repository 
+     * To use Eloquent Methods which are not exist on repository
      *  Example Eloquent findOrFail() method
      *
      * @param $method

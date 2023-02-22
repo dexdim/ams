@@ -177,7 +177,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
-        App\Providers\ProductRepositoryServiceProvider::class,
+        App\Providers\InventoryRepositoryServiceProvider::class,
 
         Maatwebsite\Excel\ExcelServiceProvider::class,
     ],
