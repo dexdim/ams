@@ -19,12 +19,13 @@
             <!-- /.card-header -->
             <div class="card-body table-responsive p-0">
               <table class=" table table-hover table-bordered table-condensed">
-                <thead class="thead-dark">
+                <thead class="thead-dark text-center">
                   <tr>
                     <th>ID Code</th>
                     <th width="5%">QR</th>
                     <th width="5%">Category</th>
                     <th width="25%">Description</th>
+                    <th>Serial Number</th>
                     <th width="15%">User</th>
                     <th width="15%">Email</th>
                     <th>Status</th>
@@ -36,9 +37,10 @@
                 <tbody>
                   <tr v-for="inventory in inventories.data" :key="inventory.id">
                     <td>{{inventory.idcode}}</td>
-                    <td><img :src="'https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl='+inventory.idcode" width="30px"></td>
+                    <td><img :src="'https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl='+inventory.idcode" width="30px"></td>
                     <td>{{inventory.category.name}}</td>
                     <td>{{inventory.description}}</td>
+                    <td>{{inventory.serialnumber}}</td>
                     <td>{{inventory.name}}</td>
                     <td>{{inventory.email}}</td>
                     <td>{{inventory.status}}</td>
