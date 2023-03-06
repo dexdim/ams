@@ -155,6 +155,7 @@
                       <option>-</option>
                       <option>Miguel Garcia</option>
                       <option>Marlene Maria Angela Benedict</option>
+			<option>Rosy Khairana</option>
                       <option v-for="(emp,index) in employees.data" :key="index" :value="emp" :selected="index == form.name">{{ emp }}</option>
                     </select>
                     <has-error :form="form" field="name"></has-error>
@@ -165,6 +166,7 @@
                       <option>-</option>
                       <option>miguel@hostinger.com</option>
                       <option>marlene.benedict@hostinger.com</option>
+			<option>rosy.khairana@hostinger.com</option>
                       <option v-for="(emp,index) in employees.data" :key="index" :value="index" :selected="index == form.email">{{ emp }}</option>
                     </select>
                     <has-error :form="form" field="email"></has-error>
@@ -178,6 +180,7 @@
                       <option>-</option>
                       <option>Miguel Garcia</option>
                       <option>Marlene Maria Angela Benedict</option>
+			<option>Rosy Khairana</option>
                       <option v-for="(emp,index) in employees.data" :key="index" :value="index" :selected="index == form.history">{{ emp }}</option>
                     </select>
                     <has-error :form="form" field="history"></has-error>
