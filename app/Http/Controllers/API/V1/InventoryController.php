@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 
 class InventoryController extends BaseController
 {
-
     protected $inventory = '';
 
     /**
@@ -50,7 +49,7 @@ class InventoryController extends BaseController
     public function store(InventoryRequest $request)
     {
 
-        $inventory = $this->inventory->create([
+        $inventories = $this->inventory->create([
 
             'idcode' => $request->get('idcode'),
             'category_id' => $request->get('category_id'),
@@ -69,7 +68,7 @@ class InventoryController extends BaseController
             'checkedby' => $request->get('checkedby'),
         ]);
 
-        return $this->sendResponse($inventory, 'Inventory created successfully');
+        return $this->sendResponse($inventories, 'Inventory created successfully');
     }
 
     /**
@@ -80,9 +79,9 @@ class InventoryController extends BaseController
      */
     public function show($id)
     {
-        $inventory = $this->inventory->with(['category'])->findOrFail($id);
+        $inventories = $this->inventory->with(['category'])->findOrFail($id);
 
-        return $this->sendResponse($inventory, 'Inventory Details');
+        return $this->sendResponse($inventories, 'Inventory Details');
     }
 
     /**
@@ -94,12 +93,12 @@ class InventoryController extends BaseController
      */
     public function update(Request $request, $id)
     {
-        $inventory = $this->inventory->findOrFail($id);
+        $inventories = $this->inventory->findOrFail($id);
 
-        $inventory->update($request->all());
+        $inventories->update($request->all());
 
 
-        return $this->sendResponse($inventory, 'Inventory information has been updated');
+        return $this->sendResponse($inventories, 'Inventory information has been updated');
     }
 
     /**
@@ -112,11 +111,11 @@ class InventoryController extends BaseController
 
         $this->authorize('isAdmin');
 
-        $inventory = $this->inventory->findOrFail($id);
+        $inventories = $this->inventory->findOrFail($id);
 
-        $inventory->delete();
+        $inventories->delete();
 
-        return $this->sendResponse($inventory, 'Inventory has been deleted');
+        return $this->sendResponse($inventories, 'Inventory has been deleted');
     }
 
     public function search()

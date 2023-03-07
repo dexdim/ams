@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\V1;
 
+use App\Http\Requests\Inventory\EmployeeRequest;
 use App\Http\Controllers\Controller;
 use App\Models\Employee;
 use Illuminate\Http\Request;
@@ -20,7 +21,6 @@ class EmployeeController extends BaseController
         $this->middleware('auth:api');
         $this->employee = $employee;
     }
-
 
     /**
      * Display a listing of the resource.
@@ -41,7 +41,7 @@ class EmployeeController extends BaseController
      */
     public function list()
     {
-        $employees = $this->employee->pluck('name', 'email');
+        $employees = $this->employee->all();
 
         return $this->sendResponse($employees, 'Employee list');
     }
@@ -56,7 +56,7 @@ class EmployeeController extends BaseController
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request)
+    public function store(EmployeeRequest $request)
     {
         $employees = $this->employee->create([
             'name' => $request->get('name'),
