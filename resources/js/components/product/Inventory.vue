@@ -458,16 +458,7 @@ export default {
 
     "form.status"(value) {
       if (value === "Storage" || value === "Working") {
-        this.employees = [
-          {
-            id: "1",
-            name: "-",
-            email: "office.operation@niagahoster.co.id",
-            dept: "People",
-          },
-        ];
-        const selectedName = this.employees.find((emp = emp.name === "-"));
-        this.form.name = selectedName ? selectedOption.name : "";
+        this.form.name = this.employees.find((emp) => emp.name === "-").name;
       } else {
         this.loadEmployee();
       }
