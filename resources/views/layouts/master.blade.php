@@ -42,7 +42,7 @@
             <router-link to="/inventory" class="brand-link">
                 <img src="{{ asset('/images/logo.png') }}" alt="The Logo" class="brand-image img-circle"
                     style="opacity: .8">
-                <span class="brand-text font-weight-light">{{ config('app.name', 'Laravel') }}</span>
+                <span class="brand-text">{{ config('app.name', 'Laravel') }}</span>
             </router-link>
 
             <!-- Sidebar -->

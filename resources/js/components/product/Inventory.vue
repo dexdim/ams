@@ -21,13 +21,14 @@
               <table class=" table table-hover table-bordered table-condensed">
                 <thead class="thead-dark text-center">
                   <tr>
-                    <th>ID Code</th>
-                    <th width="5%">QR</th>
+                    <th width="5%">ID Code</th>
+                    <th width="3%">QR</th>
                     <th width="5%">Category</th>
-                    <th width="25%">Description</th>
-                    <th>Serial Number</th>
+                    <th width="30%">Description</th>
+                    <th width="10%">Serial Number</th>
                     <th width="15%">User</th>
                     <th width="15%">Email</th>
+                    <th width="10%">Dept</th>
                     <th>Status</th>
                     <th width="10%">Date</th>
                     <th>PIC</th>
@@ -43,6 +44,7 @@
                     <td>{{ inventory.serialnumber }}</td>
                     <td>{{ inventory.name }}</td>
                     <td>{{ inventory.email }}</td>
+                    <td>{{ inventory.dept }}</td>
                     <td>{{ inventory.status }}</td>
                     <td>{{ formatDate(inventory.checkdate) }}</td>
                     <td>{{ inventory.checkedby }}</td>
@@ -151,42 +153,38 @@
                 </div>
 
                 <div class="form-row">
-                  <div class="form-group col-md-6">
+                  <div class="form-group col-md-4">
                     <label>User</label>
                     <select class="form-control" v-model="form.name">
-                      <option>-</option>
-                      <option>Miguel Garcia</option>
-                      <option>Marlene Maria Angela Benedict</option>
-                      <option>Rosy Khairana</option>
                       <option v-for="emp in employees" :value="emp.name" :selected="emp.name == form.name" :key="emp.id">{{ emp.name }}</option>
                     </select>
                     <has-error :form="form" field="name"></has-error>
                   </div>
-                  <div class="form-group col-md-6">
+                  <div class="form-group col-md-4">
                     <label>Email</label>
                     <input type="text" name="email" class="form-control" v-model="form.email" readonly>
                     <has-error :form="form" field="email"></has-error>
                   </div>
-                </div>
-
-                <div class="form-row">
-                  <div class="form-group col-md-8">
-                    <label>User History</label>
-                    <select class="form-control" v-model="form.history">
-                      <option>-</option>
-                      <option>Miguel Garcia</option>
-                      <option>Marlene Maria Angela Benedict</option>
-                      <option>Rosy Khairana</option>
-                      <option v-for="emp in employees" :value="emp.name" :selected="emp.name == form.name" :key="emp.id">{{ emp.name }}</option>
-                    </select>
-                    <has-error :form="form" field="history"></has-error>
+                  <div class="form-group col-md-4">
+                    <label>Department</label>
+                    <input type="text" name="dept" class="form-control" v-model="form.dept" readonly>
+                    <has-error :form="form" field="dept"></has-error>
                   </div>
                 </div>
 
-                <div class="form-group">
-                  <label>Notes</label>
-                  <input v-model="form.notes" type="text" name="notes" class="form-control" :class="{ 'is-invalid': form.errors.has('notes') }">
-                  <has-error :form="form" field="notes"></has-error>
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label>User History</label>
+                    <select class="form-control" v-model="form.history">
+                      <option v-for="emp in employees_history" :value="emp.name" :selected="emp.name == form.name" :key="emp.id">{{ emp.name }}</option>
+                    </select>
+                    <has-error :form="form" field="history"></has-error>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label>Notes</label>
+                    <input v-model="form.notes" type="text" name="notes" class="form-control" :class="{ 'is-invalid': form.errors.has('notes') }">
+                    <has-error :form="form" field="notes"></has-error>
+                  </div>
                 </div>
 
                 <div class="form-row">
@@ -215,7 +213,7 @@
           </div>
         </div>
       </div>
-      <!--<pre>{{ all }}</pre>-->
+      <pre>{{ employees }}</pre>
     </div>
   </section>
 </template>
@@ -230,7 +228,7 @@ export default {
     return {
       editmode: false,
 
-      inventories: {},
+      inventories: [],
       all: [],
       search: null,
       form: new Form({
@@ -252,8 +250,9 @@ export default {
         checkdate: "",
         checkedby: "",
       }),
-      categories: {},
+      categories: [],
       employees: [],
+      employees_history: [],
     };
   },
   methods: {
@@ -262,7 +261,7 @@ export default {
 
       axios
         .get("/api/inventory?page=" + page)
-        .then(({ data }) => (this.inventories = data.data))
+        .then((data) => (this.inventories = data.data.data))
         .catch((error) => console.log(error));
 
       this.$Progress.finish();
@@ -281,20 +280,26 @@ export default {
       // if(this.$gate.isAdmin()){
       axios
         .get("/api/inventory")
-        .then(({ data }) => (this.inventories = data.data))
+        .then((data) => (this.inventories = data.data.data))
         .catch((error) => console.log(error));
       // }
     },
     loadCategory() {
       axios
         .get("/api/category/list")
-        .then(({ data }) => (this.categories = data))
+        .then((data) => (this.categories = data.data))
         .catch((error) => console.log(error));
     },
     loadEmployee() {
       axios
         .get("/api/employee/list")
         .then((data) => (this.employees = data.data.data))
+        .catch((error) => console.log(error));
+    },
+    loadEmployeeHistory() {
+      axios
+        .get("/api/employee/list")
+        .then((data) => (this.employees_history = data.data.data))
         .catch((error) => console.log(error));
     },
     editInventory(inventory) {
@@ -422,11 +427,12 @@ export default {
     this.loadInventory();
     this.loadCategory();
     this.loadEmployee();
+    this.loadEmployeeHistory();
     Fire.$on("searching", () => {
       let query = this.$parent.search;
       axios
         .get("api/findItem?q=" + query)
-        .then(({ data }) => (this.inventories = data));
+        .then((data) => (this.inventories = data.data));
     });
     this.$Progress.finish();
   },
@@ -447,6 +453,24 @@ export default {
     "form.name"(value) {
       const selectedOption = this.employees.find((emp) => emp.name === value);
       this.form.email = selectedOption ? selectedOption.email : "";
+      this.form.dept = selectedOption ? selectedOption.dept : "";
+    },
+
+    "form.status"(value) {
+      if (value === "Storage" || value === "Working") {
+        this.employees = [
+          {
+            id: "1",
+            name: "-",
+            email: "office.operation@niagahoster.co.id",
+            dept: "People",
+          },
+        ];
+        const selectedName = this.employees.find((emp = emp.name === "-"));
+        this.form.name = selectedName ? selectedOption.name : "";
+      } else {
+        this.loadEmployee();
+      }
     },
   },
 };

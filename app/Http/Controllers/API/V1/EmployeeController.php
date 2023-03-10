@@ -58,9 +58,11 @@ class EmployeeController extends BaseController
      */
     public function store(EmployeeRequest $request)
     {
+
         $employees = $this->employee->create([
             'name' => $request->get('name'),
             'email' => $request->get('email'),
+            'dept' => $request->get('dept'),
         ]);
 
         return $this->sendResponse($employees, 'Employee created successfully');
@@ -76,7 +78,7 @@ class EmployeeController extends BaseController
      */
     public function update(Request $request, $id)
     {
-        $employees = $this->category->findOrFail($id);
+        $employees = $this->employee->findOrFail($id);
 
         $employees->update($request->all());
 

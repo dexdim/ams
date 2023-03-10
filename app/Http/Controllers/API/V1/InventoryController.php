@@ -34,7 +34,8 @@ class InventoryController extends BaseController
         return $this->sendResponse($inventories, 'Inventory list');
     }
 
-    public function all(){
+    public function all()
+    {
         $inventories = $this->inventory->all();
 
         return $this->sendResponse($inventories, 'All inventory list');
@@ -131,7 +132,6 @@ class InventoryController extends BaseController
                     ->orWhere('email', 'LIKE', "%$search%")
                     ->orWhere('status', 'LIKE', "%$search%")
                     ->orWhere('history', 'LIKE', "%$search%");
-
             })->latest()->with('category')->paginate(100);
         }
 
@@ -144,5 +144,4 @@ class InventoryController extends BaseController
         $duplicate = $record->replicate();
         $duplicate->push();
     }
-
 }
