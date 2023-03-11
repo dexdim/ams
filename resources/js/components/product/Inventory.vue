@@ -210,7 +210,7 @@
           </div>
         </div>
       </div>
-      <pre>{{ inventories }}</pre>
+      <!--<pre>{{ inventories }}</pre>-->
     </div>
   </section>
 </template>
