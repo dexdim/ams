@@ -22,14 +22,13 @@
                 <thead class="thead-dark text-center">
                   <tr>
                     <th width="5%">ID Code</th>
-                    <th width="3%">QR</th>
+                    <th width="2%">QR</th>
                     <th width="5%">Category</th>
-                    <th width="30%">Description</th>
-                    <th width="10%">Serial Number</th>
+                    <th width="25%">Description</th>
+                    <th>Serial Number</th>
                     <th width="15%">User</th>
                     <th width="15%">Email</th>
-                    <th width="10%">Dept</th>
-                    <th>Status</th>
+                    <th width="7.5%">Status</th>
                     <th width="10%">Date</th>
                     <th>PIC</th>
                     <th v-if="$gate.isAdmin()">Action</th>
@@ -44,7 +43,6 @@
                     <td>{{ inventory.serialnumber }}</td>
                     <td>{{ inventory.name }}</td>
                     <td>{{ inventory.email }}</td>
-                    <td>{{ inventory.dept }}</td>
                     <td>{{ inventory.status }}</td>
                     <td>{{ formatDate(inventory.checkdate) }}</td>
                     <td>{{ inventory.checkedby }}</td>
@@ -62,7 +60,6 @@
                   </tr>
                 </tbody>
               </table>
-
             </div>
 
             <!-- /.card-body -->
@@ -213,7 +210,7 @@
           </div>
         </div>
       </div>
-      <!--<pre>{{ employees }}</pre>-->
+      <pre>{{ inventories }}</pre>
     </div>
   </section>
 </template>
@@ -460,7 +457,7 @@ export default {
       if (value === "Storage" || value === "Working") {
         this.form.name = this.employees.find((emp) => emp.name === "-").name;
       } else {
-        this.loadEmployee();
+        this.employee;
       }
     },
   },
