@@ -18,7 +18,7 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body table-responsive p-0">
-              <table class=" table table-hover table-bordered table-condensed">
+              <table class="table table-hover table-bordered table-condensed">
                 <thead class="thead-dark text-center">
                   <tr>
                     <th width="5%">ID Code</th>
@@ -173,7 +173,7 @@
                   <div class="form-group col-md-6">
                     <label>User History</label>
                     <select class="form-control" v-model="form.history">
-                      <option v-for="emp in employees_history" :value="emp.name" :selected="emp.name == form.name" :key="emp.id">{{ emp.name }}</option>
+                      <option v-for="emp in employees" :value="emp.name" :selected="emp.name == form.name" :key="emp.id">{{ emp.name }}</option>
                     </select>
                     <has-error :form="form" field="history"></has-error>
                   </div>
@@ -249,7 +249,6 @@ export default {
       }),
       categories: [],
       employees: [],
-      employees_history: [],
     };
   },
   methods: {
@@ -291,12 +290,6 @@ export default {
       axios
         .get("/api/employee/list")
         .then((data) => (this.employees = data.data.data))
-        .catch((error) => console.log(error));
-    },
-    loadEmployeeHistory() {
-      axios
-        .get("/api/employee/list")
-        .then((data) => (this.employees_history = data.data.data))
         .catch((error) => console.log(error));
     },
     editInventory(inventory) {
@@ -424,7 +417,6 @@ export default {
     this.loadInventory();
     this.loadCategory();
     this.loadEmployee();
-    this.loadEmployeeHistory();
     Fire.$on("searching", () => {
       let query = this.$parent.search;
       axios
