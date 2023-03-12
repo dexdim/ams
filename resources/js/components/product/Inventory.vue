@@ -455,3 +455,16 @@ export default {
   },
 };
 </script>
+
+<style>
+.table {
+  height: 300px;
+  overflow-y: scroll;
+}
+
+thead th {
+  position: sticky;
+  top: 0;
+  background-color: white;
+}
+</style>
