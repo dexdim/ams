@@ -1,12 +1,12 @@
 // Fonts
-@import url('https://fonts.googleapis.com/css?family=Poppins');
+@import url("https://fonts.googleapis.com/css?family=Poppins");
 
 // Variables
-@import 'variables';
+@import "variables";
 
 // Bootstrap
-@import '~bootstrap/scss/bootstrap';
-@import '~admin-lte/dist/css/adminlte.css';
+@import "~bootstrap/scss/bootstrap";
+@import "~admin-lte/dist/css/adminlte.css";
 
 // Font Awesome
 @import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
@@ -15,7 +15,7 @@
 @import "~@fortawesome/fontawesome-free/scss/brands.scss";
 
 // sweet alert
-@import 'sweetalert2/src/sweetalert2.scss';
+@import "sweetalert2/src/sweetalert2.scss";
 // import 'sweetalert2/src/sweetalert2.scss'
 
 body {
@@ -74,7 +74,6 @@ body {
 .cyan {
     color: $cyan;
 }
-
 
 // .content-header{
 //   padding: 10px 0.5rem !important;
