@@ -23,7 +23,7 @@
                     <th width="5%">Category</th>
                     <th width="25%">Description</th>
                     <th>Serial Number</th>
-                    <th width="15%">User</th>
+                    <th width="15%">Name</th>
                     <th width="15%">Email</th>
                     <th width="7.5%">Status</th>
                     <th width="10%">Date</th>
@@ -84,38 +84,37 @@
               <div class="modal-body">
 
                 <div class="form-row">
-                  <div class="form-group col-md-6">
+                  <div class="form-group col-md-3">
                     <label>ID Code</label>
                     <input v-model="form.idcode" type="text" name="idcode" class="form-control" :class="{ 'is-invalid': form.errors.has('idcode') }">
                     <has-error :form="form" field="idcode"></has-error>
                   </div>
-                  <div class="form-group col-md-6">
+                  <div class="form-group col-md-3">
                     <label>Category</label>
                     <select class="form-control" v-model="form.category_id">
                       <option v-for="(cat, index) in categories.data" :key="index" :value="index" :selected="index == form.category_id">{{ cat }}</option>
                     </select>
                     <has-error :form="form" field="category_id"></has-error>
                   </div>
-                </div>
-
-                <div class="form-group">
-                  <label>Description</label>
-                  <input v-model="form.description" type="text" name="description" class="form-control" :class="{ 'is-invalid': form.errors.has('description') }">
-                  <has-error :form="form" field="description"></has-error>
+                  <div class="form-group col-md-6">
+                    <label>Description</label>
+                    <input v-model="form.description" type="text" name="description" class="form-control" :class="{ 'is-invalid': form.errors.has('description') }">
+                    <has-error :form="form" field="description"></has-error>
+                  </div>
                 </div>
 
                 <div class="form-row">
-                  <div class="form-group col-md-4">
+                  <div class="form-group col-md-3">
                     <label>Brand</label>
                     <input v-model="form.brand" type="text" name="brand" class="form-control" :class="{ 'is-invalid': form.errors.has('brand') }">
                     <has-error :form="form" field="brand"></has-error>
                   </div>
-                  <div class="form-group col-md-4">
+                  <div class="form-group col-md-3">
                     <label>Serial Number</label>
                     <input v-model="form.serialnumber" type="text" name="serialnumber" class="form-control" :class="{ 'is-invalid': form.errors.has('serialnumber') }">
                     <has-error :form="form" field="serialnumber"></has-error>
                   </div>
-                  <div class="form-group col-md-4">
+                  <div class="form-group col-md-3">
                     <label>Supplier</label>
                     <input v-model="form.supplier" type="text" name="supplier" class="form-control" :class="{ 'is-invalid': form.errors.has('supplier') }">
                     <has-error :form="form" field="supplier"></has-error>
@@ -123,17 +122,26 @@
                 </div>
 
                 <div class="form-row">
-                  <div class="form-group col-md-4">
+                  <div class="form-group col-md-3">
                     <label>Purchase Cost</label>
                     <input v-model="form.purchasecost" type="text" name="purchasecost" class="form-control" :class="{ 'is-invalid': form.errors.has('purchasecost') }">
                     <has-error :form="form" field="purchasecost"></has-error>
                   </div>
-                  <div class="form-group col-md-4 clearfix">
+                  <div class="form-group col-md-3">
                     <label>Purchase Date</label>
                     <DatetimePicker v-model="form.purchasedate" :format="'DD-MMMM-YYYY'" :show-clear="true" :use-current="true" name="purchasedate" class="form-control" :class="{ 'is-invalid': form.errors.has('purchasedate') }" />
                     <has-error :form="form" field="purchasedate"></has-error>
                   </div>
-                  <div class="form-group col-md-4">
+
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label>User</label>
+                    <v-select v-model="form.name" :options="employees" label="name" :reduce="name => name.name" />
+                    <has-error :form="form" field="name"></has-error>
+                  </div>
+                  <div class="form-group col-md-3">
                     <label>Status</label>
                     <select class="form-control" v-model="form.status">
                       <option>Storage</option>
@@ -147,21 +155,14 @@
                 </div>
 
                 <div class="form-row">
-                  <div class="form-group col-md-4">
-                    <label>User</label>
-                    <select class="form-control" v-model="form.name">
-                      <option v-for="emp in employees" :value="emp.name" :selected="emp.name == form.name" :key="emp.id">{{ emp.name }}</option>
-                    </select>
-                    <has-error :form="form" field="name"></has-error>
-                  </div>
-                  <div class="form-group col-md-4">
+                  <div class="form-group col-md-6">
                     <label>Email</label>
-                    <input type="text" name="email" class="form-control" v-model="form.email" readonly>
+                    <input type="text" name="email" class="form-control-plaintext" v-model="form.email" disabled>
                     <has-error :form="form" field="email"></has-error>
                   </div>
-                  <div class="form-group col-md-4">
+                  <div class="form-group col-md-6">
                     <label>Department</label>
-                    <input type="text" name="dept" class="form-control" v-model="form.dept" readonly>
+                    <input type="text" name="dept" class="form-control-plaintext" v-model="form.dept" disabled>
                     <has-error :form="form" field="dept"></has-error>
                   </div>
                 </div>
@@ -169,9 +170,7 @@
                 <div class="form-row">
                   <div class="form-group col-md-6">
                     <label>User History</label>
-                    <select class="form-control" v-model="form.history">
-                      <option v-for="emp in employees" :value="emp.name" :selected="emp.name == form.name" :key="emp.id">{{ emp.name }}</option>
-                    </select>
+                    <v-select v-model="form.history" :options="employees" label="name" :reduce="name => name.name" />
                     <has-error :form="form" field="history"></has-error>
                   </div>
                   <div class="form-group col-md-6">
@@ -216,12 +215,13 @@
 <script>
 import DatetimePicker from "vue-bootstrap-datetimepicker";
 import "pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css";
+import vSelect from "vue-select";
+import "vue-select/dist/vue-select.css";
 
 export default {
   data() {
     return {
       editmode: false,
-
       inventories: [],
       all: [],
       search: null,
@@ -246,6 +246,7 @@ export default {
       }),
       categories: [],
       employees: [],
+      filteredEmployees: [],
     };
   },
   methods: {
@@ -277,6 +278,16 @@ export default {
         .catch((error) => console.log(error));
       // }
     },
+
+    //reloadInventory(id) {
+    //  // if(this.$gate.isAdmin()){
+    //  axios
+    //    .get("/api/inventory" + id)
+    //    .then((data) => (this.inventories = data.data.data))
+    //    .catch((error) => console.log(error));
+    //  // }
+    //},
+
     loadCategory() {
       axios
         .get("/api/category/list")
@@ -341,8 +352,8 @@ export default {
           });
           this.$Progress.finish();
           //  Fire.$emit('AfterCreate');
-
           this.loadInventory();
+          //  this.reloadInventory(this.form.id);
         })
         .catch(() => {
           this.$Progress.fail();
@@ -423,17 +434,8 @@ export default {
     this.$Progress.finish();
   },
 
-  computed: {
-    filteredItems() {
-      return this.items.filter((item) => {
-        const idcode = item.idcode.toString().toLowerCase();
-        const username = item.username.toString.toLowerCase();
-        const result = this.search.toLowerCase();
-        return idcode.includes(result) || username.includes(result);
-      });
-    },
-  },
-  components: { DatetimePicker },
+  computed: {},
+  components: { DatetimePicker, "v-select": vSelect },
 
   watch: {
     "form.name"(value) {
@@ -446,7 +448,7 @@ export default {
       if (value === "Storage" || value === "Working") {
         this.form.name = this.employees.find((emp) => emp.name === "-").name;
       } else {
-        this.employee;
+        this.employees;
       }
     },
   },

@@ -36,6 +36,7 @@
         "vue-json-csv": "^2.1.0",
         "vue-json-excel": "^0.3.0",
         "vue-progressbar": "^0.7.5",
-        "vue-router": "^3.5.3"
+        "vue-router": "^3.5.3",
+        "vue-select": "^3.20.2"
     }
 }
