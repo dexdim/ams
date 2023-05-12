@@ -132,6 +132,11 @@
                     <DatetimePicker v-model="form.purchasedate" :format="'DD-MMMM-YYYY'" :show-clear="true" :use-current="true" name="purchasedate" class="form-control" :class="{ 'is-invalid': form.errors.has('purchasedate') }" />
                     <has-error :form="form" field="purchasedate"></has-error>
                   </div>
+                  <div class="form-group col-md-3">
+                    <label>Windows License</label>
+                    <input v-model="form.license" type="text" name="license" class="form-control" :class="{ 'is-invalid': form.errors.has('license') }">
+                    <has-error :form="form" field="license"></has-error>
+                  </div>
 
                 </div>
 
@@ -236,6 +241,7 @@ export default {
         supplier: "",
         purchasecost: "",
         purchasedate: "",
+        license: "",
         name: "",
         email: "",
         status: "",

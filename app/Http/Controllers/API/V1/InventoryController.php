@@ -60,6 +60,7 @@ class InventoryController extends BaseController
             'supplier' => $request->get('supplier'),
             'purchasecost' => $request->get('purchasecost'),
             'purchasedate' => $request->get('purchasedate'),
+            'license' => $request->get('license'),
             'name' => $request->get('name'),
             'email' => $request->get('email'),
             'status' => $request->get('status'),
@@ -128,6 +129,7 @@ class InventoryController extends BaseController
                     ->orWhere('category', 'LIKE', "%$search%")
                     ->orWhere('description', 'LIKE', "%$search%")
                     ->orWhere('serialnumber', 'LIKE', "%$search%")
+                    ->orWhere('license', 'LIKE', "%$search%")
                     ->orWhere('name', 'LIKE', "%$search%")
                     ->orWhere('email', 'LIKE', "%$search%")
                     ->orWhere('status', 'LIKE', "%$search%")
