@@ -33,7 +33,9 @@
                 </thead>
                 <tbody>
                   <tr v-for="inventory in inventories.data" :key="inventory.id">
-                    <td>{{ inventory.idcode }}</td>
+                    <a href="#" @click="viewInventory(inventory)">
+                      <td>{{ inventory.idcode }}</td>
+                    </a>
                     <td class="text-center"><img :src="'https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=' + inventory.idcode" width="30px"></td>
                     <td>{{ inventory.category.name }}</td>
                     <td>{{ inventory.description }}</td>
@@ -68,7 +70,118 @@
         </div>
       </div>
 
-      <!-- Modal -->
+      <!-- Modal View-->
+      <div class="modal fade" id="view" tabindex="-1" role="dialog" aria-labelledby="view" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">View Inventory</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+
+            <form>
+              <div class="modal-body">
+                <div class="form-row">
+                  <div class="form-group col-md-3">
+                    <label>ID Code</label>
+                    <div>{{form.idcode}}</div>
+                  </div>
+                  <div class="form-group col-md-3">
+                    <label>Category</label>
+                    <div>{{form.category.name}}</div>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label>Description</label>
+                    <div>{{form.description}}</div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group col-md-3">
+                    <label>Brand</label>
+                    <div>{{form.brand}}</div>
+                  </div>
+                  <div class="form-group col-md-3">
+                    <label>Serial Number</label>
+                    <div>{{form.serialnumber}}</div>
+                  </div>
+                  <div class="form-group col-md-3">
+                    <label>Supplier</label>
+                    <div>{{form.supplier}}</div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group col-md-3">
+                    <label>Purchase Cost</label>
+                    <div>{{form.purchasecost}}</div>
+                  </div>
+                  <div class="form-group col-md-3">
+                    <label>Purchase Date</label>
+                    <div>{{form.purchasedate}}</div>
+                  </div>
+                  <div class="form-group col-md-3">
+                    <label>Windows License</label>
+                    <div>{{form.license}}</div>
+                  </div>
+
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label>User</label>
+                    <div>{{form.user}}</div>
+                  </div>
+                  <div class="form-group col-md-3">
+                    <label>Status</label>
+                    <div>{{form.status}}</div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label>Email</label>
+                    <div>{{form.email}}</div>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label>Department</label>
+                    <div>{{form.dept}}</div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label>User History</label>
+                    <div>{{form.history}}</div>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label>Notes</label>
+                    <div>{{form.notes}}</div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group col-md-4">
+                    <label>Check Date</label>
+                    <div>{{form.checkdate}}</div>
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label>Checked By</label>
+                    <div>{{form.checkedby}}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Add & Update-->
       <div class="modal fade" id="addNew" tabindex="-1" role="dialog" aria-labelledby="addNew" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content">
@@ -306,6 +419,14 @@ export default {
         .then((data) => (this.employees = data.data.data))
         .catch((error) => console.log(error));
     },
+
+    viewInventory(inventory) {
+      this.viewmode = true;
+      this.form.reset();
+      $("#view").modal("show");
+      this.form.fill(inventory);
+    },
+
     editInventory(inventory) {
       this.editmode = true;
       this.form.reset();
