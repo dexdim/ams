@@ -407,6 +407,11 @@ export default {
     //  // }
     //},
 
+    employee: {
+      name: "Creative Team (Zaki)",
+      email: "creative@niagahoster.co.id",
+    },
+
     loadCategory() {
       axios
         .get("/api/category/list")
@@ -572,7 +577,12 @@ export default {
     },
 
     "form.status"(value) {
-      if (value === "Storage" || value === "Working") {
+      if (
+        value === "Storage" ||
+        value === "Working" ||
+        value === "Broken" ||
+        value === "Sold"
+      ) {
         this.form.name = this.employees.find((emp) => emp.name === "-").name;
       } else {
         this.employees;
