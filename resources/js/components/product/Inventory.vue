@@ -267,6 +267,7 @@
                       <option>Broken</option>
                       <option>Sold</option>
                       <option>Working</option>
+                      <option>Lost</option>
                     </select>
                     <has-error :form="form" field="status"></has-error>
                   </div>
