@@ -1,8 +1,8 @@
 version: "3.1"
 services:
   traefik:
-    image: "traefik:v2.8"
-    container_name: "traefik"
+    image: traefik:v2.8
+    container_name: ams-traefik
     restart: always
     command:
       - "--api.insecure=true"
@@ -22,7 +22,7 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile
-    container_name: ams
+    container_name: ams-php
     restart: always
     tty: true
     environment:
@@ -43,7 +43,7 @@ services:
     tty: true
     labels:
       - "traefik.enable=true"
-      - traefik.http.routers.webserver.rule=Host(`192.168.1.236`)
+      - traefik.http.routers.webserver.rule=Host(`103.161.185.68`)
       - traefik.http.services.webserver.loadbalancer.server.port=80
       # ports:
       #   - "8008:80"
@@ -77,6 +77,7 @@ services:
   #adminer for db access
   adminer:
     image: adminer:latest
+    container_name: ams-adminer
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
