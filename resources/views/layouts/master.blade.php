@@ -40,8 +40,7 @@
         <aside class="main-sidebar sidebar-light-primary">
             <!-- Brand Logo -->
             <router-link to="/inventory" class="brand-link">
-                <img src="{{ asset('/images/logo.png') }}" alt="The Logo" class="brand-image img-circle"
-                    style="opacity: .8">
+                <img src="{{ asset('/images/logo.png') }}" alt="The Logo" class="brand-image">
                 <span class="brand-text">{{ config('app.name', 'Laravel') }}</span>
             </router-link>
 
@@ -54,7 +53,6 @@
                             <img src="{{ auth()->user()->photo }}" class="img-circle elevation-1" alt="User Image">
                         </div>
                         <div class="info">
-
                             {{ Auth::user()->name }}
                             <span class="d-block text-muted">
                                 {{ Ucfirst(Auth::user()->type) }}
@@ -108,7 +106,7 @@
                 <b>Version</b> 1.9.1
             </div>
             {{-- Default to the left --}}
-            <strong>Copyright &copy; 2023 <a href="https://niagahoster.co.id">Domainesia</a>.</strong> All rights
+            <strong>Copyright &copy; 2024 <a href="https://domainesia.com">Domainesia</a>.</strong> All rights
             reserved.
         </footer>
     </div>
