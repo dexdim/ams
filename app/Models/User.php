@@ -40,7 +40,7 @@ class User extends Authenticatable // implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
-     /**
+    /**
      * Get the profile photo URL attribute.
      *
      * @return string

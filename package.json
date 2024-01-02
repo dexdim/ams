@@ -7,7 +7,7 @@
         "production": "mix --production"
     },
     "devDependencies": {
-        "axios": "^0.21.4",
+        "axios": "^1.6.2",
         "cross-env": "^5.1",
         "jquery": "^3.6.0",
         "laravel-mix": "^6.0.43",
@@ -17,7 +17,7 @@
         "sass": "^1.49.0",
         "sass-loader": "^12.0.0",
         "vue": "^2.6.14",
-        "vue-loader": "^15.9.8",
+        "vue-loader": "^15",
         "vue-template-compiler": "^2.6.14",
         "webpack": "^5.9.0"
     },
@@ -28,7 +28,7 @@
         "bootstrap": "^4.6.1",
         "laravel-vue-pagination": "^2.3.1",
         "moment": "^2.29.1",
-        "npm": "^8.12.1",
+        "npm": "^10.2.5",
         "sweetalert2": "^9.17.2",
         "vform": "^1.0.1",
         "vue-bootstrap-datetimepicker": "^5.0.1",
