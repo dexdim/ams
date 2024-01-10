@@ -43,7 +43,7 @@
                     <td>{{ inventory.name }}</td>
                     <td>{{ inventory.email }}</td>
                     <td>{{ inventory.status }}</td>
-                    <td>{{ formatDate(inventory.checkdate) }}</td>
+                    <td>{{ inventory.checkdate }}</td>
                     <td>{{ inventory.checkedby }}</td>
                     <td class="text-center" v-if="$gate.isAdmin()">
                       <a href="#" @click="editInventory(inventory)">
@@ -242,21 +242,21 @@
                   </div>
                   <div class="form-group col-md-3">
                     <label>Purchase Date</label>
-                    <DatetimePicker v-model="form.purchasedate" :format="'DD-MMMM-YYYY'" :show-clear="true" :use-current="true" name="purchasedate" class="form-control" :class="{ 'is-invalid': form.errors.has('purchasedate') }" />
+                    <date-picker v-model="form.purchasedate" value-type="format" format="DD MMMM YYYY" name="purchasedate" :class="{ 'is-invalid': form.errors.has('purchasedate') }"></date-picker>
                     <has-error :form="form" field="purchasedate"></has-error>
                   </div>
-                  <div class="form-group col-md-3">
+                  <!--<div class="form-group col-md-3">
                     <label>Windows License</label>
                     <input v-model="form.license" type="text" name="license" class="form-control" :class="{ 'is-invalid': form.errors.has('license') }">
                     <has-error :form="form" field="license"></has-error>
-                  </div>
+                  </div>-->
 
                 </div>
 
                 <div class="form-row">
                   <div class="form-group col-md-6">
                     <label>User</label>
-                    <v-select v-model="form.name" :options="employees" label="name" :reduce="name => name.name" />
+                    <v-select v-model="form.name" :options="sortedEmployees" label="name" :reduce="name => name.name" />
                     <has-error :form="form" field="name"></has-error>
                   </div>
                   <div class="form-group col-md-3">
@@ -302,15 +302,14 @@
                 <div class="form-row">
                   <div class="form-group col-md-4">
                     <label>Check Date</label>
-                    <DatetimePicker v-model="form.checkdate" :format="'DD-MMMM-YYYY'" :show-clear="true" :use-current="true" name="checkdate" class="form-control" :class="{ 'is-invalid': form.errors.has('checkdate') }" />
+                    <date-picker v-model="form.checkdate" value-type="format" format="DD MMMM YYYY" name="checkdate" :class="{ 'is-invalid': form.errors.has('checkdate') }"></date-picker>
                     <has-error :form="form" field="checkdate"></has-error>
                   </div>
                   <div class="form-group col-md-4">
                     <label>Checked By</label>
                     <select class="form-control" v-model="form.checkedby">
                       <option>Dimas</option>
-                      <option>Maudy</option>
-                      <option>Adith</option>
+                      <option>Kinan</option>
                     </select>
                     <has-error :form="form" field="checkedby"></has-error>
                   </div>
@@ -325,15 +324,15 @@
           </div>
         </div>
       </div>
-      <!--<pre>{{ inventories }}</pre>-->
+      <!--<pre>{{ categories }}</pre>-->
     </div>
   </section>
 </template>
 
 
 <script>
-import DatetimePicker from "vue-bootstrap-datetimepicker";
-import "pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css";
+import DatePicker from "vue2-datepicker";
+import "vue2-datepicker/index.css";
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
 
@@ -407,11 +406,6 @@ export default {
     //    .catch((error) => console.log(error));
     //  // }
     //},
-
-    employee: {
-      name: "Creative Team (Zaki)",
-      email: "creative@niagahoster.co.id",
-    },
 
     loadCategory() {
       axios
@@ -544,12 +538,6 @@ export default {
         }
       });
     },
-
-    formatDate(dateString) {
-      const date = new Date(dateString);
-      const options = { day: "numeric", month: "long", year: "numeric" };
-      return date.toLocaleDateString("en-US", options);
-    },
   },
   mounted() {},
   created() {
@@ -567,8 +555,20 @@ export default {
     this.$Progress.finish();
   },
 
-  computed: {},
-  components: { DatetimePicker, "v-select": vSelect },
+  computed: {
+    sortedCategories() {
+      return this.categories.slice().sort((a, b) => {
+        return a.data.name.localeCompare(b.data.name);
+      });
+    },
+
+    sortedEmployees() {
+      return this.employees.slice().sort((a, b) => {
+        return a.name.localeCompare(b.name);
+      });
+    },
+  },
+  components: { DatePicker, "v-select": vSelect },
 
   watch: {
     "form.name"(value) {

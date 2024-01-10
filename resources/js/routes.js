@@ -16,5 +16,9 @@ export default [
         path: "/product/category",
         component: require("./components/product/Category.vue").default,
     },
+    {
+        path: "/product/employee",
+        component: require("./components/product/Employee.vue").default,
+    },
     { path: "*", component: require("./components/NotFound.vue").default },
 ];

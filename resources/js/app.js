@@ -104,8 +104,8 @@ window.Fire = new Vue();
 const app = new Vue({
     el: "#app",
     router,
-    data: {
-        search: "",
+    data:{
+        search: null,
     },
     methods: {
         searchit() {

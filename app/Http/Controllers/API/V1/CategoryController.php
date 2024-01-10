@@ -97,6 +97,6 @@ class CategoryController extends BaseController
 
         $categories->delete();
 
-        return $this->sendResponse([$categories], 'Category has been deleted');
+        return $this->sendResponse($categories, 'Category has been deleted');
     }
 }
