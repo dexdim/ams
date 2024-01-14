@@ -18,7 +18,7 @@
     <div class="wrapper" id="app">
 
         <!-- Navbar -->
-        <nav class="main-header navbar navbar-expand bg-light navbar-light border-bottom">
+        {{-- <nav class="main-header navbar navbar-expand bg-light navbar-light border-bottom">
             <!-- Left navbar links -->
 
 
@@ -33,7 +33,7 @@
                 </div>
             </div>
 
-        </nav>
+        </nav> --}}
         <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
@@ -43,6 +43,7 @@
                 <img src="{{ asset('/images/logo.png') }}" alt="The Logo" class="brand-image">
                 <span class="brand-text">{{ config('app.name', 'Laravel') }}</span>
             </router-link>
+
 
             <!-- Sidebar -->
             <div class="sidebar">
@@ -103,7 +104,7 @@
         <footer class="main-footer">
             {{-- To the right --}}
             <div class="float-right d-none d-sm-block">
-                <b>Version</b> 1.9.1
+                <b>Version</b> 2.0.1
             </div>
             {{-- Default to the left --}}
             <strong>Copyright &copy; 2024 <a href="https://domainesia.com">Domainesia</a>.</strong> All rights

@@ -52,7 +52,7 @@
             </div>
             <!-- /.card-body -->
             <div class="card-footer">
-              <pagination :data="employees" @pagination-change-page="getResults"></pagination>
+              <pagination :data="employees" @pagination-change-page="loadEmployee"></pagination>
             </div>
           </div>
           <!-- /.card -->
@@ -170,7 +170,7 @@ export default {
       if (this.$gate.isAdmin()) {
         axios
           .get("/api/employee/list")
-          .then((data) => (this.employees = data.data.data));
+          .then(({ data }) => (this.employees = data.data));
       }
     },
 
@@ -208,7 +208,7 @@ export default {
         // Send request to the server
         if (result.value) {
           this.form
-            .delete("api/employee/" + id)
+            .delete(`api/employee/` + id)
             .then(() => {
               Swal.fire("Deleted!", "Employee has been deleted.", "success");
               // Fire.$emit('AfterCreate');

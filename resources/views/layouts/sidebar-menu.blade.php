@@ -3,9 +3,25 @@
 
         <li class="nav-item">
             <router-link to="/inventory" class="nav-link">
-                <i class="nav-icon fas fa-list orange"></i>
+                <i class="nav-icon fas fa-table red"></i>
                 <p>
                     Inventory
+                </p>
+            </router-link>
+        </li>
+        <li class="nav-item">
+            <router-link to="/product/category" class="nav-link">
+                <i class="nav-icon fas fa-list orange"></i>
+                <p>
+                    Category
+                </p>
+            </router-link>
+        </li>
+        <li class="nav-item">
+            <router-link to="/product/employee" class="nav-link">
+                <i class="nav-icon fas fa-users green"></i>
+                <p>
+                    Employee
                 </p>
             </router-link>
         </li>
@@ -14,8 +30,7 @@
         @can('isAdmin')
             <li class="nav-item has-treeview">
                 <a href="#" class="nav-link">
-
-                    <i class="nav-icon fas fa-cog green"></i>
+                    <i class="nav-icon fas fa-cog black"></i>
                     <p>
                         Settings
                         <i class="right fas fa-angle-left"></i>
@@ -23,20 +38,13 @@
                 </a>
                 <ul class="nav nav-treeview">
 
-                    <li class="nav-item">
-                        <router-link to="/product/category" class="nav-link">
-                            <i class="nav-icon fas fa-list-ol green"></i>
-                            <p>
-                                Category
-                            </p>
-                        </router-link>
-                    </li>
+
 
                     <li class="nav-item">
                         <router-link to="/users" class="nav-link">
-                            <i class="fa fa-users nav-icon blue"></i>
+                            <i class="fa fa-user-tie nav-icon blue"></i>
                             <p>
-                                Users
+                                User
                             </p>
                         </router-link>
                     </li>

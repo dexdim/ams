@@ -14,56 +14,64 @@
               </div>
             </div>
             <!-- /.card-header -->
-            <div class="card-body table-responsive p-0">
-              <table class="table table-hover table-bordered table-condensed">
-                <thead class="thead-dark text-center">
-                  <tr>
-                    <th width="5%">ID Code</th>
-                    <th width="2%">QR</th>
-                    <th width="5%">Category</th>
-                    <th width="25%">Description</th>
-                    <th>Serial Number</th>
-                    <th width="15%">Name</th>
-                    <th width="15%">Email</th>
-                    <th width="7.5%">Status</th>
-                    <th width="10%">Date</th>
-                    <th>PIC</th>
-                    <th v-if="$gate.isAdmin()">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="inventory in inventories.data" :key="inventory.id">
-                    <a href="#" @click="viewInventory(inventory)">
-                      <td>{{ inventory.idcode }}</td>
-                    </a>
-                    <td class="text-center"><img :src="'https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=' + inventory.idcode" width="30px"></td>
-                    <td>{{ inventory.category.name }}</td>
-                    <td>{{ inventory.description }}</td>
-                    <td>{{ inventory.serialnumber }}</td>
-                    <td>{{ inventory.name }}</td>
-                    <td>{{ inventory.email }}</td>
-                    <td>{{ inventory.status }}</td>
-                    <td>{{ inventory.checkdate }}</td>
-                    <td>{{ inventory.checkedby }}</td>
-                    <td class="text-center" v-if="$gate.isAdmin()">
-                      <a href="#" @click="editInventory(inventory)">
-                        <i class="fa fa-edit blue"></i>
-                      </a>
-                      <a href="#" @click="duplicateInventory(inventory.id)">
-                        <i class="fa fa-copy green"></i>
-                      </a>
-                      <a href="#" @click="deleteInventory(inventory.id)">
-                        <i class="fa fa-trash red"></i>
-                      </a>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <div class="search-container">
+                  <input v-model="searchQuery" @input="search" placeholder="Search..." class="search-input">
+                  <i class="fas fa-search search-icon" @click="search"></i>
+                </div>
 
+                <table class="table table-hover table-bordered table-condensed">
+                  <thead class="thead-dark text-center">
+                    <tr>
+                      <th width="5%">ID Code</th>
+                      <!--<th width="2%">QR</th>-->
+                      <th width="5%">Category</th>
+                      <th width="20%">Description</th>
+                      <th>Serial Number</th>
+                      <th width="10%">Name</th>
+                      <th width="15%">Email</th>
+                      <th width="7%">Status</th>
+                      <th width="10%">Date</th>
+                      <th>PIC</th>
+                      <th v-if="$gate.isAdmin()">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="inventory in inventories.data" :key="inventory.id">
+                      <td><a href="#" @click="viewInventory(inventory)">
+                          {{ inventory.idcode }}
+                        </a></td>
+                      <!--<td class="text-center"><img :src="'https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=' + inventory.idcode" width="30px"></td>-->
+                      <td>{{ inventory.category.name }}</td>
+                      <td>{{ inventory.description }}</td>
+                      <td>{{ inventory.serialnumber }}</td>
+                      <td>{{ inventory.name }}</td>
+                      <td>{{ inventory.email }}</td>
+                      <td>{{ inventory.status }}</td>
+                      <td>{{ inventory.checkdate }}</td>
+                      <td>{{ inventory.checkedby }}</td>
+                      <td class="text-center" v-if="$gate.isAdmin()">
+                        <a href="#" @click="editInventory(inventory)">
+                          <i class="fa fa-edit blue"></i>
+                        </a>
+                        <a href="#" @click="duplicateInventory(inventory.id)">
+                          <i class="fa fa-copy green"></i>
+                        </a>
+                        <a href="#" @click="deleteInventory(inventory.id)">
+                          <i class="fa fa-trash red"></i>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
             <!-- /.card-body -->
             <div class="card-footer">
-              <pagination :data="inventories" @pagination-change-page="getResults" :limit=25></pagination>
+              <div class="pagination-container">
+                <pagination :data="inventories" @pagination-change-page="loadInventory" :limit=25></pagination>
+              </div>
             </div>
           </div>
           <!-- /.card -->
@@ -205,8 +213,10 @@
                   <div class="form-group col-md-3">
                     <label>Category</label>
                     <select class="form-control" v-model="form.category_id">
-                      <option v-for="(cat, index) in categories.data" :key="index" :value="index" :selected="index == form.category_id">{{ cat }}</option>
+                      <!--<option v-for="(cat, index) in categories" :key="index" :value="index" :selected="index == form.category_id">{{ cat }}</option>-->
+                      <option v-for="cat in sortedCategories" :key="cat.id" :value="cat.id" :selected="cat.id == form.category_id"> {{ cat.name }}</option>
                     </select>
+                    <!--<v-select v-model="form.category_id" :options="sortedCategories" label="name" value="id" :reduce="(name) => name.id" />-->
                     <has-error :form="form" field="category_id"></has-error>
                   </div>
                   <div class="form-group col-md-6">
@@ -250,7 +260,6 @@
                     <input v-model="form.license" type="text" name="license" class="form-control" :class="{ 'is-invalid': form.errors.has('license') }">
                     <has-error :form="form" field="license"></has-error>
                   </div>-->
-
                 </div>
 
                 <div class="form-row">
@@ -262,12 +271,7 @@
                   <div class="form-group col-md-3">
                     <label>Status</label>
                     <select class="form-control" v-model="form.status">
-                      <option>Storage</option>
-                      <option>Deployed</option>
-                      <option>Broken</option>
-                      <option>Sold</option>
-                      <option>Working</option>
-                      <option>Lost</option>
+                      <option v-for="stat in sortedStatuses" :key="stat" :value="stat" :selected="stat == form.status">{{ stat }}</option>
                     </select>
                     <has-error :form="form" field="status"></has-error>
                   </div>
@@ -289,7 +293,7 @@
                 <div class="form-row">
                   <div class="form-group col-md-6">
                     <label>User History</label>
-                    <v-select v-model="form.history" :options="employees" label="name" :reduce="name => name.name" />
+                    <v-select v-model="form.history" :options="sortedEmployees" label="name" :reduce="name => name.name" />
                     <has-error :form="form" field="history"></has-error>
                   </div>
                   <div class="form-group col-md-6">
@@ -315,6 +319,7 @@
                   </div>
                 </div>
               </div>
+
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button v-show="editmode" type="submit" class="btn btn-success">Update</button>
@@ -324,7 +329,7 @@
           </div>
         </div>
       </div>
-      <!--<pre>{{ categories }}</pre>-->
+      <!--<pre>{{ inventories }}</pre>-->
     </div>
   </section>
 </template>
@@ -340,9 +345,9 @@ export default {
   data() {
     return {
       editmode: false,
-      inventories: [],
+      inventories: {},
       all: [],
-      search: null,
+      searchQuery: "",
       form: new Form({
         id: "",
         idcode: "",
@@ -363,22 +368,20 @@ export default {
         checkdate: "",
         checkedby: "",
       }),
+      statuses: ["Storage", "Deployed", "Working", "Lost", "Sold", "Broken"],
       categories: [],
       employees: [],
-      filteredEmployees: [],
     };
   },
   methods: {
-    getResults(page = 1) {
-      this.$Progress.start();
-
-      axios
-        .get("/api/inventory?page=" + page)
-        .then((data) => (this.inventories = data.data.data))
-        .catch((error) => console.log(error));
-
-      this.$Progress.finish();
-    },
+    //getResults(page = 1) {
+    //  this.$Progress.start();
+    //  axios
+    //    .get(`/api/inventory?page=${page}&search=${this.search}`)
+    //    .then(({ data }) => (this.inventories = data.data.data))
+    //    .catch((error) => console.log(error));
+    //  this.$Progress.finish();
+    //},
 
     loadAll() {
       // if(this.$gate.isAdmin()){
@@ -389,13 +392,18 @@ export default {
       // }
     },
 
-    loadInventory() {
+    loadInventory(page = 1) {
       // if(this.$gate.isAdmin()){
       axios
-        .get("/api/inventory")
+        .get(`/api/inventory/search?page=${page}&search=${this.searchQuery}`)
         .then((data) => (this.inventories = data.data.data))
         .catch((error) => console.log(error));
+      this.$Progress.finish();
       // }
+    },
+
+    search() {
+      this.loadInventory();
     },
 
     //reloadInventory(id) {
@@ -409,13 +417,13 @@ export default {
 
     loadCategory() {
       axios
-        .get("/api/category/list")
-        .then((data) => (this.categories = data.data))
+        .get(`/api/category/list`)
+        .then((data) => (this.categories = data.data.data))
         .catch((error) => console.log(error));
     },
     loadEmployee() {
       axios
-        .get("/api/employee/list")
+        .get(`/api/employee/list`)
         .then((data) => (this.employees = data.data.data))
         .catch((error) => console.log(error));
     },
@@ -441,7 +449,7 @@ export default {
     createInventory() {
       this.$Progress.start();
       this.form
-        .post("/api/inventory")
+        .post(`/api/inventory`)
         .then((response) => {
           if (response.data.success) {
             $("#addNew").modal("hide");
@@ -469,7 +477,7 @@ export default {
     updateInventory() {
       this.$Progress.start();
       this.form
-        .put("api/inventory/" + this.form.id)
+        .put(`api/inventory/` + this.form.id)
         .then((response) => {
           // success
           $("#addNew").modal("hide");
@@ -498,7 +506,7 @@ export default {
         // Send request to the server
         if (result.value) {
           this.form
-            .delete("api/inventory/" + id)
+            .delete(`api/inventory/` + id)
             .then(() => {
               Swal.fire("Deleted!", "Your record has been deleted.", "success");
               // Fire.$emit('AfterCreate');
@@ -522,7 +530,7 @@ export default {
         // Send request to the server
         if (result.value) {
           this.form
-            .post("api/inventory/duplicate/" + id)
+            .post(`api/inventory/duplicate/` + id)
             .then(() => {
               Swal.fire(
                 "Duplicated!",
@@ -538,33 +546,51 @@ export default {
         }
       });
     },
+
+    searchInventory() {
+      this.loadInventory();
+    },
   },
-  mounted() {},
+  mounted() {
+    this.loadInventory();
+  },
   created() {
     this.$Progress.start();
     this.loadAll();
-    this.loadInventory();
     this.loadCategory();
     this.loadEmployee();
     Fire.$on("searching", () => {
       let query = this.$parent.search;
       axios
-        .get("api/findItem?q=" + query)
+        .get("api/search?q=" + query)
         .then((data) => (this.inventories = data.data));
     });
     this.$Progress.finish();
   },
 
   computed: {
+    mappedCategories() {
+      // Transform the original object into an array of objects
+      return Object.keys(this.categories).map((id) => ({
+        id,
+        name: this.categories[id],
+      }));
+    },
     sortedCategories() {
-      return this.categories.slice().sort((a, b) => {
-        return a.data.name.localeCompare(b.data.name);
-      });
+      // Sort the array based on the 'name' property
+      return this.mappedCategories
+        .slice()
+        .sort((a, b) => a.name.localeCompare(b.name));
     },
 
     sortedEmployees() {
       return this.employees.slice().sort((a, b) => {
         return a.name.localeCompare(b.name);
+      });
+    },
+    sortedStatuses() {
+      return this.statuses.slice().sort((a, b) => {
+        return a.localeCompare(b);
       });
     },
   },
@@ -594,13 +620,49 @@ export default {
 </script>
 
 <style>
-.table {
-  overflow-y: scroll;
+.card {
+  width: 100%; /* Adjust the card width as needed */
 }
 
+.table-responsive {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.table {
+  overflow-y: scroll;
+  width: 100%;
+}
+
+.pagination-container {
+  max-height: 200px;
+  overflow-y: auto;
+}
 thead th {
   position: sticky;
   top: 0;
   background-color: white;
+}
+
+.search-container {
+  margin-bottom: 20px;
+  /*margin-top: 20px;
+  margin-left: 20px;*/
+}
+
+.search-input {
+  padding: 10px;
+  font-size: 12px;
+  border: 3px solid #ccc;
+  border-radius: 10px;
+  width: 300px;
+  outline: none;
+}
+
+.search-icon {
+  cursor: pointer;
+  margin-left: 10px;
+  font-size: 20px;
+  color: #555;
 }
 </style>

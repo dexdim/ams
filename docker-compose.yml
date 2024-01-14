@@ -1,99 +1,47 @@
-version: "3.1"
+version: "3.0"
 services:
-  traefik:
-    image: traefik:v2.8
-    container_name: ams-traefik
-    restart: always
-    command:
-      - "--api.insecure=true"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:80"
-    ports:
-      - "80:80"
-      - "8080:8080"
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-    networks:
-      - app-network
-
-  #PHP Service
   app:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile
-    container_name: ams-php
+    image: deneva/rna-pr:master
+    container_name: app
     restart: always
-    tty: true
-    environment:
-      SERVICE_NAME: ams
-      SERVICE_TAGS: dev
-    working_dir: /var/www
     volumes:
-      - ./:/var/www
-      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+      - .:/var/www/html
+    ports:
+      - '127.0.0.1:8083:80'
     networks:
       - app-network
+    depends_on:
+      - db
 
-  #Nginx Service
-  webserver:
-    image: nginx:alpine
-    container_name: ams-webserver
-    restart: always
-    tty: true
-    labels:
-      - "traefik.enable=true"
-      - traefik.http.routers.webserver.rule=Host(`103.161.185.68`)
-      - traefik.http.services.webserver.loadbalancer.server.port=80
-      # ports:
-      #   - "8008:80"
-      #  - "4431:443"
-    volumes:
-      - ./:/var/www
-      - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
-    networks:
-      - app-network
-
-  #MySQL Service
   db:
-    image: mysql:8.0.17
-    container_name: ams-db
-    command: --default-authentication-plugin=mysql_native_password
+    image: mysql
+    container_name: db
     restart: always
-    tty:
-      true
-      #ports:
-      #- "3307:3306"
-    environment:
-      MYSQL_DATABASE: ams
-      MYSQL_ROOT_PASSWORD: mlDt1vHNM3Dyy046kbgdUAgDO1mT82JW
-      SERVICE_TAGS: dev
-      SERVICE_NAME: mysql
+    ports:
+      - "127.0.0.1:3306:3306"
     volumes:
-      - dbdata:/var/lib/mysql
+      - 'dbdir:/data'
+    environment:
+      MYSQL_DATABASE: 'laravel'
+      MYSQL_USER: 'laravel'
+      MYSQL_PASSWORD: 'laravelpassword'
+      MYSQL_ROOT_PASSWORD: 'laravelrootpassword'
     networks:
       - app-network
 
-  #adminer for db access
   adminer:
     image: adminer:latest
-    container_name: ams-adminer
-    restart: unless-stopped
-    labels:
-      - "traefik.enable=true"
-      - traefik.http.routers.adminer.rule=Host(`db.remote`)
-      - traefik.http.services.adminer.loadbalancer.server.port=8080
+    container_name: adminer
+    restart: always
     ports:
-      - 8036:8080
+      - "127.0.0.1:8036:8080"
     networks:
       - app-network
 
-#Docker Networks
 networks:
   app-network:
     driver: bridge
 
-#Volumes
 volumes:
-  dbdata:
+  dbdir:
     driver: local

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\API\V1;
 
+
 use App\Http\Requests\Inventory\InventoryRequest;
-use App\Http\Controllers\Controller;
 use App\Models\Inventory;
 use Illuminate\Http\Request;
 
@@ -29,15 +29,59 @@ class InventoryController extends BaseController
      */
     public function index()
     {
-        $inventories = $this->inventory->latest()->with('category')->paginate(50);
+        //$query = Inventory::query();
+        //if ($request->has('search')) {
+        //    $search = $request->input('search');
+        //    $query->where('idcode', 'LIKE', "%$search%")
+        //        ->orWhere('category', 'LIKE', "%$search%")
+        //        ->orWhere('description', 'LIKE', "%$search%")
+        //        ->orWhere('serialnumber', 'LIKE', "%$search%")
+        //        ->orWhere('license', 'LIKE', "%$search%")
+        //        ->orWhere('name', 'LIKE', "%$search%")
+        //        ->orWhere('email', 'LIKE', "%$search%")
+        //        ->orWhere('status', 'LIKE', "%$search%")
+        //        ->orWhere('history', 'LIKE', "%$search%");
+        //}
+        //$inventories = $query->latest()->with('category')->paginate(25);
+        ////return response()->json($inventories);
+        //return $this->sendResponse($inventories, 'Inventory list');
+        return view('inventory.index');
+    }
 
+    public function search(Request $request)
+    {
+        //if ($search = \Request::get('q')) {
+        //    $inventories = Inventory::where(function ($query) use ($search) {
+        //        $query->where('idcode', 'LIKE', "%$search%")
+        //            ->orWhere('category', 'LIKE', "%$search%")
+        //            ->orWhere('description', 'LIKE', "%$search%")
+        //            ->orWhere('serialnumber', 'LIKE', "%$search%")
+        //            ->orWhere('license', 'LIKE', "%$search%")
+        //            ->orWhere('name', 'LIKE', "%$search%")
+        //            ->orWhere('email', 'LIKE', "%$search%")
+        //            ->orWhere('status', 'LIKE', "%$search%")
+        //            ->orWhere('history', 'LIKE', "%$search%");
+        //    })->latest()->with('category', 'employee')->paginate(25);
+        //}
+        //return $inventories;
+        $search = $request->input('search');
+        $inventories = Inventory::where(function ($query) use ($search) {
+            $query->where('idcode', 'LIKE', "%$search%")
+                ->orWhere('category', 'LIKE', "%$search%")
+                ->orWhere('description', 'LIKE', "%$search%")
+                ->orWhere('serialnumber', 'LIKE', "%$search%")
+                ->orWhere('license', 'LIKE', "%$search%")
+                ->orWhere('name', 'LIKE', "%$search%")
+                ->orWhere('email', 'LIKE', "%$search%")
+                ->orWhere('status', 'LIKE', "%$search%")
+                ->orWhere('history', 'LIKE', "%$search%");
+        })->latest()->with('category', 'employee')->paginate(25);
         return $this->sendResponse($inventories, 'Inventory list');
     }
 
     public function all()
     {
         $inventories = $this->inventory->all();
-
         return $this->sendResponse($inventories, 'All inventory list');
     }
 
@@ -51,7 +95,6 @@ class InventoryController extends BaseController
     {
 
         $inventories = $this->inventory->create([
-
             'idcode' => $request->get('idcode'),
             'category_id' => $request->get('category_id'),
             'description' => $request->get('description'),
@@ -81,8 +124,7 @@ class InventoryController extends BaseController
      */
     public function show($id)
     {
-        $inventories = $this->inventory->with(['category'])->findOrFail($id);
-
+        $inventories = $this->inventory->with('category', 'employee')->findOrFail($id);
         return $this->sendResponse($inventories, 'Inventory Details');
     }
 
@@ -96,10 +138,7 @@ class InventoryController extends BaseController
     public function update(Request $request, $id)
     {
         $inventories = $this->inventory->findOrFail($id);
-
         $inventories->update($request->all());
-
-
         return $this->sendResponse($inventories, 'Inventory information has been updated');
     }
 
@@ -112,33 +151,12 @@ class InventoryController extends BaseController
     {
 
         $this->authorize('isAdmin');
-
         $inventories = $this->inventory->findOrFail($id);
-
         $inventories->delete();
-
         return $this->sendResponse($inventories, 'Inventory has been deleted');
     }
 
-    public function search()
-    {
 
-        if ($search = \Request::get('q')) {
-            $inventories = Inventory::where(function ($query) use ($search) {
-                $query->where('idcode', 'LIKE', "%$search%")
-                    ->orWhere('category', 'LIKE', "%$search%")
-                    ->orWhere('description', 'LIKE', "%$search%")
-                    ->orWhere('serialnumber', 'LIKE', "%$search%")
-                    ->orWhere('license', 'LIKE', "%$search%")
-                    ->orWhere('name', 'LIKE', "%$search%")
-                    ->orWhere('email', 'LIKE', "%$search%")
-                    ->orWhere('status', 'LIKE', "%$search%")
-                    ->orWhere('history', 'LIKE', "%$search%");
-            })->latest()->with('category')->paginate(100);
-        }
-
-        return $inventories;
-    }
 
     public function duplicate($id)
     {

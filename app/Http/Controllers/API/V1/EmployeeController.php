@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\API\V1;
 
-use App\Http\Requests\Inventory\EmployeeRequest;
+
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Inventory\EmployeeRequest;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 
