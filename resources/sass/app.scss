@@ -22,8 +22,20 @@ body {
     font-size: 14px;
 }
 
+
+.top-sidebar{
+    position:relative;
+}
+.brand-image{
+    position: relative;
+    top: 5px
+}
+
 .brand-text{
-    font-size: 14px;
+    position: inherit;
+    font-size: 22px;
+    font-family: Verdana;
+    right: 10px;
 }
 
 .card-body {

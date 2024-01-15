@@ -30,7 +30,7 @@ class EmployeeController extends BaseController
      */
     public function index()
     {
-        $employees = $this->employee->latest()->paginate(20);
+        $employees = $this->employee->paginate(20);
 
         return $this->sendResponse($employees, 'Employee list');
     }

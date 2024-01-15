@@ -29,7 +29,7 @@ class CategoryController extends BaseController
      */
     public function index()
     {
-        $categories = $this->category->latest()->paginate(10);
+        $categories = $this->category->paginate(10);
 
         return $this->sendResponse($categories, 'Category list');
     }

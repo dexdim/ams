@@ -75,7 +75,7 @@ class InventoryController extends BaseController
                 ->orWhere('email', 'LIKE', "%$search%")
                 ->orWhere('status', 'LIKE', "%$search%")
                 ->orWhere('history', 'LIKE', "%$search%");
-        })->latest()->with('category', 'employee')->paginate(25);
+        })->latest()->with('category', 'employee')->paginate(10);
         return $this->sendResponse($inventories, 'Inventory list');
     }
 

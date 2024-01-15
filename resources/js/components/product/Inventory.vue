@@ -5,41 +5,44 @@
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <download-excel :data="all" class="btn btn-sm btn-primary">Download CSV</download-excel>
-              <div class="card-tools">
-                <button type="button" class="btn btn-sm btn-primary" @click="newInventory" v-if="$gate.isAdmin()">
-                  <i class="fa fa-plus-square"></i>
-                  Add New
-                </button>
+              <div class="search-container">
+                <div class="search-container">
+                  <input v-model="searchQuery" @input="search" placeholder="Search" class="form-control">
+                  <span class="search-icon">
+                    <i class="fas fa-search"></i>
+                  </span>
+                </div>
+                <div class="card-tools">
+                  <download-excel :data="all" class="btn btn-sm btn-primary">Download CSV</download-excel>
+                  <button type="button" class="btn btn-sm btn-primary" @click="newInventory" v-if="$gate.isAdmin()">
+                    <i class="fa fa-plus-square"></i>
+                    Add New
+                  </button>
+                </div>
               </div>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
               <div class="table-responsive">
-                <div class="search-container">
-                  <input v-model="searchQuery" @input="search" placeholder="Search..." class="search-input">
-                  <i class="fas fa-search search-icon" @click="search"></i>
-                </div>
-
                 <table class="table table-hover table-bordered table-condensed">
                   <thead class="thead-dark text-center">
                     <tr>
-                      <th width="5%">ID Code</th>
+                      <th width="7.5%">ID Code</th>
                       <!--<th width="2%">QR</th>-->
                       <th width="5%">Category</th>
                       <th width="20%">Description</th>
-                      <th>Serial Number</th>
+                      <th width="10%">Serial Number</th>
                       <th width="10%">Name</th>
-                      <th width="15%">Email</th>
-                      <th width="7%">Status</th>
-                      <th width="10%">Date</th>
-                      <th>PIC</th>
-                      <th v-if="$gate.isAdmin()">Action</th>
+                      <th width="10%">Email</th>
+                      <th width="7.5%">Status</th>
+                      <th width="7.5%">Date</th>
+                      <th width="5%">PIC</th>
+                      <th width="7.5%" v-if="$gate.isAdmin()">Action</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr v-for="inventory in inventories.data" :key="inventory.id">
-                      <td><a href="#" @click="viewInventory(inventory)">
+                      <td class="text-center text-bold"><a href="#" @click="viewInventory(inventory)">
                           {{ inventory.idcode }}
                         </a></td>
                       <!--<td class="text-center"><img :src="'https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=' + inventory.idcode" width="30px"></td>-->
@@ -48,17 +51,17 @@
                       <td>{{ inventory.serialnumber }}</td>
                       <td>{{ inventory.name }}</td>
                       <td>{{ inventory.email }}</td>
-                      <td>{{ inventory.status }}</td>
-                      <td>{{ inventory.checkdate }}</td>
-                      <td>{{ inventory.checkedby }}</td>
+                      <td class="text-center">{{ inventory.status }}</td>
+                      <td class="text-center">{{ inventory.checkdate }}</td>
+                      <td class="text-center">{{ inventory.checkedby }}</td>
                       <td class="text-center" v-if="$gate.isAdmin()">
-                        <a href="#" @click="editInventory(inventory)">
+                        <a href="#" @click="editInventory(inventory)" class="a">
                           <i class="fa fa-edit blue"></i>
                         </a>
-                        <a href="#" @click="duplicateInventory(inventory.id)">
+                        <a href="#" @click="duplicateInventory(inventory.id)" class="a">
                           <i class="fa fa-copy green"></i>
                         </a>
-                        <a href="#" @click="deleteInventory(inventory.id)">
+                        <a href="#" @click="deleteInventory(inventory.id)" class="a">
                           <i class="fa fa-trash red"></i>
                         </a>
                       </td>
@@ -140,7 +143,7 @@
                 <div class="form-row">
                   <div class="form-group col-md-6">
                     <label>User</label>
-                    <div>{{form.user}}</div>
+                    <div>{{form.name}}</div>
                   </div>
                   <div class="form-group col-md-3">
                     <label>Status</label>
@@ -638,31 +641,31 @@ export default {
   max-height: 200px;
   overflow-y: auto;
 }
-thead th {
-  position: sticky;
-  top: 0;
-  background-color: white;
+
+.a {
+  margin: 5px;
 }
 
 .search-container {
-  margin-bottom: 20px;
-  /*margin-top: 20px;
-  margin-left: 20px;*/
-}
-
-.search-input {
-  padding: 10px;
-  font-size: 12px;
-  border: 3px solid #ccc;
-  border-radius: 10px;
-  width: 300px;
-  outline: none;
+  display: flex;
+  align-items: center;
+  width: 40%;
 }
 
 .search-icon {
+  position: relative;
+  top: 2px;
+  right: 30px;
+  color: #3490dc;
   cursor: pointer;
-  margin-left: 10px;
-  font-size: 20px;
-  color: #555;
+}
+
+.search-icon i {
+  font-size: 18px;
+}
+
+.card-tools {
+  position: absolute;
+  right: 25px;
 }
 </style>

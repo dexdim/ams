@@ -5,18 +5,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
     <title>{{ config('app.name', 'Laravel') }}</title>
-
-
     <link rel="stylesheet" href="{{ mix('/css/app.css') }}">
 </head>
 
 <body class="hold-transition sidebar-mini">
     <div class="wrapper" id="app">
-
         <!-- Navbar -->
         {{-- <nav class="main-header navbar navbar-expand bg-light navbar-light border-bottom">
             <!-- Left navbar links -->
@@ -37,22 +32,20 @@
         <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
-        <aside class="main-sidebar sidebar-light-primary">
+        <aside class="main-sidebar sidebar-dark-primary">
             <!-- Brand Logo -->
-            <router-link to="/inventory" class="brand-link">
-                <img src="{{ asset('/images/logo.png') }}" alt="The Logo" class="brand-image">
-                <span class="brand-text">{{ config('app.name', 'Laravel') }}</span>
-            </router-link>
-
+            <div class="top-sidebar">
+                <router-link to="/inventory" class="brand-link">
+                    <img src="{{ asset('/images/logo-2.png') }}" alt="The Logo" class="brand-image">
+                    <span class="brand-text">{{ config('app.name', 'Laravel') }}</span>
+                </router-link>
+            </div>
 
             <!-- Sidebar -->
             <div class="sidebar">
                 <!-- Sidebar user panel (optional) -->
                 <router-link to="/profile">
                     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                        <div class="image">
-                            <img src="{{ auth()->user()->photo }}" class="img-circle elevation-1" alt="User Image">
-                        </div>
                         <div class="info">
                             {{ Auth::user()->name }}
                             <span class="d-block text-muted">
@@ -107,7 +100,7 @@
                 <b>Version</b> 2.0.1
             </div>
             {{-- Default to the left --}}
-            <strong>Copyright &copy; 2024 <a href="https://domainesia.com">Domainesia</a>.</strong> All rights
+            <strong>Copyright &copy; 2024 <a href="https://domainesia.com">Deneva</a>.</strong> All rights
             reserved.
         </footer>
     </div>
