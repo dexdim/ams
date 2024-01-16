@@ -622,7 +622,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .card {
   width: 100%; /* Adjust the card width as needed */
 }

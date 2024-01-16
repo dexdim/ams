@@ -5,54 +5,49 @@
         <div class="col-12">
           <div class="card" v-if="$gate.isAdmin()">
             <div class="card-header">
-              <h3 class="card-title">Employee List</h3>
-
-              <div class="card-tools">
-
-                <button type="button" class="btn btn-sm btn-primary" @click="newEmployee">
-                  <i class="fa fa-plus-square"></i>
-                  Add New
-                </button>
-              </div>
+              <button type="button" class="btn btn-sm btn-primary" @click="newEmployee">
+                <i class="fa fa-plus-square"></i>
+                Add New
+              </button>
             </div>
             <!-- /.card-header -->
-            <div class="card-body table-responsive p-0">
-              <table class="table table-hover">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Department</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="employee in employees" :key="employee.id">
+            <div class="card-body">
+              <div class="table-responsive p-0">
+                <table class="table table-hover table-bordered table-condensed">
+                  <thead class="thead-dark text-center">
+                    <tr>
+                      <th width="5%">ID</th>
+                      <th width="20%">Name</th>
+                      <th>Email</th>
+                      <th>Department</th>
+                      <th width="10%">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="employee in employees.data" :key="employee.id">
 
-                    <td>{{employee.id}}</td>
-                    <td class="text-capitalize">{{employee.name}}</td>
-                    <td>{{employee.email}}</td>
-                    <td>{{employee.dept}}</td>
-                    <!--<td>{{employee.deleted_at}}</td>-->
-                    <td>
-
-                      <a href="#" @click="editEmployee(employee)">
-                        <i class="fa fa-edit blue"></i>
-
-                      </a>
-                      /
-                      <a href="#" @click="deleteEmployee(employee.id)">
-                        <i class="fa fa-trash red"></i>
-                      </a>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                      <td class="text-center">{{employee.id}}</td>
+                      <td class="text-capitalize">{{employee.name}}</td>
+                      <td>{{employee.email}}</td>
+                      <td>{{employee.dept}}</td>
+                      <td class="text-center">
+                        <a href="#" @click="editEmployee(employee)" class="a">
+                          <i class="fa fa-edit blue"></i>
+                        </a>
+                        <a href="#" @click="deleteEmployee(employee.id)" class="a">
+                          <i class="fa fa-trash red"></i>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
             <!-- /.card-body -->
             <div class="card-footer">
-              <pagination :data="employees" @pagination-change-page="loadEmployee"></pagination>
+              <div class="pagination-container">
+                <pagination :data="employees" @pagination-change-page="getResults" :limit="25"></pagination>
+              </div>
             </div>
           </div>
           <!-- /.card -->
@@ -169,7 +164,7 @@ export default {
     loadEmployee() {
       if (this.$gate.isAdmin()) {
         axios
-          .get("/api/employee/list")
+          .get("/api/employee")
           .then(({ data }) => (this.employees = data.data));
       }
     },
@@ -231,3 +226,25 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.pagination-container {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.a {
+  margin: 5px;
+}
+
+.card-header {
+  position: relative;
+  height: 60px;
+}
+
+.btn {
+  position: absolute;
+  top: 15px;
+  right: 25px;
+}
+</style>

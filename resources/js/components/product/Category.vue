@@ -5,49 +5,41 @@
         <div class="col-12">
           <div class="card" v-if="$gate.isAdmin()">
             <div class="card-header">
-              <h3 class="card-title">Category List</h3>
-
-              <div class="card-tools">
-
-                <button type="button" class="btn btn-sm btn-primary" @click="newCategory">
-                  <i class="fa fa-plus-square"></i>
-                  Add New
-                </button>
-              </div>
+              <button type="button" class="btn btn-sm btn-primary" @click="newCategory">
+                <i class="fa fa-plus-square"></i>
+                Add New
+              </button>
             </div>
             <!-- /.card-header -->
-            <div class="card-body table-responsive p-0">
-              <table class="table table-hover">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Created</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="category in categories.data" :key="category.id">
+            <div class="card-body">
+              <div class="table-responsive p-0">
+                <table class="table table-hover table-bordered table-condensed">
+                  <thead class="thead-dark text-center">
+                    <tr>
+                      <th width="5%">ID</th>
+                      <th width="20%">Name</th>
+                      <th>Description</th>
+                      <th width="10%">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="category in categories.data" :key="category.id">
 
-                    <td>{{category.id}}</td>
-                    <td class="text-capitalize">{{category.name}}</td>
-                    <td>{{category.description}}</td>
-                    <td>{{category.created_at}}</td>
-                    <td>
-
-                      <a href="#" @click="editCategory(category)">
-                        <i class="fa fa-edit blue"></i>
-
-                      </a>
-                      /
-                      <a href="#" @click="deleteCategory(category.id)">
-                        <i class="fa fa-trash red"></i>
-                      </a>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                      <td class="text-center">{{category.id}}</td>
+                      <td class="text-capitalize">{{category.name}}</td>
+                      <td>{{category.description}}</td>
+                      <td class="text-center">
+                        <a href="#" @click="editCategory(category)" class="a">
+                          <i class="fa fa-edit blue"></i>
+                        </a>
+                        <a href="#" @click="deleteCategory(category.id)" class="a">
+                          <i class="fa fa-trash red"></i>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
             <!-- /.card-body -->
             <div class="card-footer">
@@ -223,3 +215,20 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.a {
+  margin: 5px;
+}
+
+.card-header {
+  position: relative;
+  height: 60px;
+}
+
+.btn {
+  position: absolute;
+  top: 15px;
+  right: 25px;
+}
+</style>

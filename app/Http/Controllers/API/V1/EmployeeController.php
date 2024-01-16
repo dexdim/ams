@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\API\V1;
 
-
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Inventory\EmployeeRequest;
 use App\Models\Employee;
@@ -30,7 +29,7 @@ class EmployeeController extends BaseController
      */
     public function index()
     {
-        $employees = $this->employee->paginate(20);
+        $employees = $this->employee->paginate(10);
 
         return $this->sendResponse($employees, 'Employee list');
     }
