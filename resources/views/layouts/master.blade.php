@@ -8,6 +8,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Laravel') }}</title>
     <link rel="stylesheet" href="{{ mix('/css/app.css') }}">
+    <link rel="icon" href="{{ asset('favicon.png') }}" type="image/x-icon" />
 </head>
 
 <body class="hold-transition sidebar-mini">

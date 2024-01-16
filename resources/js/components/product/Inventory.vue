@@ -7,7 +7,7 @@
             <div class="card-header">
               <div class="search-container">
                 <div class="search-container">
-                  <input v-model="searchQuery" @input="search" placeholder="Search" class="form-control">
+                  <input v-model="searchQuery" @keyup.enter="search" placeholder="Search" class="form-control">
                   <span class="search-icon">
                     <i class="fas fa-search"></i>
                   </span>
@@ -209,18 +209,20 @@
 
                 <div class="form-row">
                   <div class="form-group col-md-3">
-                    <label>ID Code</label>
-                    <input v-model="form.idcode" type="text" name="idcode" class="form-control" :class="{ 'is-invalid': form.errors.has('idcode') }">
-                    <has-error :form="form" field="idcode"></has-error>
+                    <label>ID Code
+                      <input v-model="form.idcode" type="text" name="idcode" class="form-control" :class="{ 'is-invalid': form.errors.has('idcode') }">
+                      <has-error :form="form" field="idcode"></has-error>
+                    </label>
                   </div>
                   <div class="form-group col-md-3">
-                    <label>Category</label>
-                    <select class="form-control" v-model="form.category_id">
-                      <!--<option v-for="(cat, index) in categories" :key="index" :value="index" :selected="index == form.category_id">{{ cat }}</option>-->
-                      <option v-for="cat in sortedCategories" :key="cat.id" :value="cat.id" :selected="cat.id == form.category_id"> {{ cat.name }}</option>
-                    </select>
-                    <!--<v-select v-model="form.category_id" :options="sortedCategories" label="name" value="id" :reduce="(name) => name.id" />-->
-                    <has-error :form="form" field="category_id"></has-error>
+                    <label>Category
+                      <select class="form-control" v-model="form.category_id">
+                        <!--<option v-for="(cat, index) in categories" :key="index" :value="index" :selected="index == form.category_id">{{ cat }}</option>-->
+                        <option v-for="cat in sortedCategories" :key="cat.id" :value="cat.id" :selected="cat.id == form.category_id"> {{ cat.name }}</option>
+                      </select>
+                      <!--<v-select v-model="form.category_id" :options="sortedCategories" label="name" value="id" :reduce="(name) => name.id" />-->
+                      <has-error :form="form" field="category_id"></has-error>
+                    </label>
                   </div>
                   <div class="form-group col-md-6">
                     <label>Description</label>
