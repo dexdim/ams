@@ -32,7 +32,7 @@
                       <th width="5%">Category</th>
                       <th width="20%">Description</th>
                       <th width="10%">Serial Number</th>
-                      <th width="10%">Name</th>
+                      <th width="10%">User</th>
                       <th width="10%">Email</th>
                       <th width="7.5%">Status</th>
                       <th width="7.5%">Date</th>
