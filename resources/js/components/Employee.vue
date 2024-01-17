@@ -25,7 +25,6 @@
                   </thead>
                   <tbody>
                     <tr v-for="employee in employees.data" :key="employee.id">
-
                       <td class="text-center">{{employee.id}}</td>
                       <td class="text-capitalize">{{employee.name}}</td>
                       <td>{{employee.email}}</td>
@@ -53,7 +52,6 @@
           <!-- /.card -->
         </div>
       </div>
-
       <div v-if="!$gate.isAdmin()">
         <not-found></not-found>
       </div>
@@ -69,9 +67,7 @@
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-
             <!-- <form @submit.prevent="createUser"> -->
-
             <form @submit.prevent="editmode ? updateEmployee() : createEmployee()">
               <div class="modal-body">
                 <div class="form-group">
@@ -129,6 +125,7 @@ export default {
 
       this.$Progress.finish();
     },
+
     updateEmployee() {
       this.$Progress.start();
       this.form
@@ -149,12 +146,14 @@ export default {
           this.$Progress.fail();
         });
     },
+
     editEmployee(employee) {
       this.editmode = true;
       this.form.reset();
       $("#addNew").modal("show");
       this.form.fill(employee);
     },
+
     newEmployee() {
       this.editmode = false;
       this.form.reset();

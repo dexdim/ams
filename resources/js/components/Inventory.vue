@@ -377,15 +377,6 @@ export default {
     };
   },
   methods: {
-    //getResults(page = 1) {
-    //  this.$Progress.start();
-    //  axios
-    //    .get(`/api/inventory?page=${page}&search=${this.search}`)
-    //    .then(({ data }) => (this.inventories = data.data.data))
-    //    .catch((error) => console.log(error));
-    //  this.$Progress.finish();
-    //},
-
     loadAll() {
       // if(this.$gate.isAdmin()){
       axios
@@ -408,15 +399,6 @@ export default {
     search() {
       this.loadInventory();
     },
-
-    //reloadInventory(id) {
-    //  // if(this.$gate.isAdmin()){
-    //  axios
-    //    .get("/api/inventory" + id)
-    //    .then((data) => (this.inventories = data.data.data))
-    //    .catch((error) => console.log(error));
-    //  // }
-    //},
 
     loadCategory() {
       axios
@@ -444,11 +426,13 @@ export default {
       $("#addNew").modal("show");
       this.form.fill(inventory);
     },
+
     newInventory() {
       this.editmode = false;
       this.form.reset();
       $("#addNew").modal("show");
     },
+
     createInventory() {
       this.$Progress.start();
       this.form
@@ -477,6 +461,7 @@ export default {
           });
         });
     },
+
     updateInventory() {
       this.$Progress.start();
       this.form
@@ -497,6 +482,7 @@ export default {
           this.$Progress.fail();
         });
     },
+
     deleteInventory(id) {
       Swal.fire({
         title: "Are you sure?",
@@ -521,6 +507,7 @@ export default {
         }
       });
     },
+
     duplicateInventory(id) {
       Swal.fire({
         title: "Are you sure?",
@@ -554,9 +541,11 @@ export default {
       this.loadInventory();
     },
   },
+
   mounted() {
     this.loadInventory();
   },
+
   created() {
     this.$Progress.start();
     this.loadAll();

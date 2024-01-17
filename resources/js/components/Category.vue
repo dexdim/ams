@@ -67,7 +67,6 @@
             </div>
 
             <!-- <form @submit.prevent="createUser"> -->
-
             <form @submit.prevent="editmode ? updateCategory() : createCategory()">
               <div class="modal-body">
                 <div class="form-group">
@@ -118,6 +117,7 @@ export default {
 
       this.$Progress.finish();
     },
+
     updateCategory() {
       this.$Progress.start();
       this.form
@@ -138,12 +138,14 @@ export default {
           this.$Progress.fail();
         });
     },
+
     editCategory(category) {
       this.editmode = true;
       this.form.reset();
       $("#addNew").modal("show");
       this.form.fill(category);
     },
+
     newCategory() {
       this.editmode = false;
       this.form.reset();
@@ -205,9 +207,11 @@ export default {
       });
     },
   },
+
   mounted() {
     console.log("Component mounted.");
   },
+
   created() {
     this.$Progress.start();
     this.loadCategories();
