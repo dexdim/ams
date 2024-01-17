@@ -1,4 +1,4 @@
-# Niagahoster Asset Management System
+## Asset Management System
 
 ## Tech Specification
 
