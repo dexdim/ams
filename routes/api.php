@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\V1\InventoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
@@ -37,6 +38,7 @@ Route::namespace('App\\Http\\Controllers\\API\V1')->group(function () {
     Route::get('employee/list', 'EmployeeController@list');
     Route::get('inventory/all', 'InventoryController@all');
     Route::post('inventory/duplicate/{id}', 'InventoryController@duplicate');
+    Route::get('inventory/count', 'InventoryController@count');
 
     Route::apiResources([
         'user' => 'UserController',

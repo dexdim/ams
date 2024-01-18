@@ -121,4 +121,20 @@ class InventoryController extends BaseController
         $duplicate = $record->replicate();
         $duplicate->push();
     }
+
+    public function count()
+    {
+        $deployed = $this->inventory->where('status', 'Deployed')->count();
+        $storage = $this->inventory->where('status', 'Storage')->count();
+        $inservice = $this->inventory->where('status', 'In Service')->count();
+        $broken = $this->inventory->where('status', 'Deployed')->count();
+        $totalEmployees = $this->inventory->count('employee');
+        return response()->json([
+            'deployed_count' => $deployed,
+            'storage_count' => $storage,
+            'inservice_count' => $inservice,
+            'broken_count' => $broken,
+            'total_employees' => $totalEmployees,
+        ]);
+    }
 }
