@@ -9,7 +9,9 @@
                         ></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Deployed</span>
-                            <span class="info-box-number">NA</span>
+                            <span class="info-box-number">{{
+                                counts.deployed
+                            }}</span>
                         </div>
                         <!-- /.info-box-content -->
                     </div>
@@ -23,7 +25,9 @@
                         ></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Storage</span>
-                            <span class="info-box-number">NA</span>
+                            <span class="info-box-number">{{
+                                counts.storage
+                            }}</span>
                         </div>
                         <!-- /.info-box-content -->
                     </div>
@@ -35,11 +39,13 @@
                 <div class="col-12 col-sm-6 col-md-3">
                     <div class="info-box mb-3">
                         <span class="info-box-icon bg-warning elevation-1"
-                            ><i class="fas fa-exclamation-triangle"></i
+                            ><i class="fas fa-tools"></i
                         ></span>
                         <div class="info-box-content">
-                            <span class="info-box-text">Broken</span>
-                            <span class="info-box-number">NA</span>
+                            <span class="info-box-text">In Service</span>
+                            <span class="info-box-number">{{
+                                counts.inservice
+                            }}</span>
                         </div>
                         <!-- /.info-box-content -->
                     </div>
@@ -52,8 +58,10 @@
                             ><i class="fas fa-times"></i
                         ></span>
                         <div class="info-box-content">
-                            <span class="info-box-text">Terminated</span>
-                            <span class="info-box-number">NA</span>
+                            <span class="info-box-text">Broken</span>
+                            <span class="info-box-number">{{
+                                counts.broken
+                            }}</span>
                         </div>
                         <!-- /.info-box-content -->
                     </div>
@@ -78,20 +86,15 @@
                                 >
                                     <i class="fas fa-minus"></i>
                                 </button>
-                                <button
-                                    type="button"
-                                    class="btn btn-tool"
-                                    data-card-widget="remove"
-                                >
-                                    <i class="fas fa-times"></i>
-                                </button>
                             </div>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body p-0">
                             <div class="table-responsive">
-                                <table class="table m-0">
-                                    <thead>
+                                <table
+                                    class="table table-hover table-bordered table-condensed m-0"
+                                >
+                                    <thead class="thead-dark text-center">
                                         <tr>
                                             <th>ID Code</th>
                                             <th>Category</th>
@@ -101,7 +104,10 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>
+                                            <td
+                                                class="text-center text-bold"
+                                                style="vertical-align: middle"
+                                            >
                                                 <a
                                                     href="pages/examples/invoice.html"
                                                     >OR9842</a
@@ -121,123 +127,6 @@
                                                     data-height="20"
                                                 >
                                                     90,80,90,-70,61,-83,63
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <a
-                                                    href="pages/examples/invoice.html"
-                                                    >OR1848</a
-                                                >
-                                            </td>
-                                            <td>Samsung Smart TV</td>
-                                            <td>
-                                                <span
-                                                    class="badge badge-warning"
-                                                    >Pending</span
-                                                >
-                                            </td>
-                                            <td>
-                                                <div
-                                                    class="sparkbar"
-                                                    data-color="#f39c12"
-                                                    data-height="20"
-                                                >
-                                                    90,80,-90,70,61,-83,68
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <a
-                                                    href="pages/examples/invoice.html"
-                                                    >OR7429</a
-                                                >
-                                            </td>
-                                            <td>iPhone 6 Plus</td>
-                                            <td>
-                                                <span class="badge badge-danger"
-                                                    >Delivered</span
-                                                >
-                                            </td>
-                                            <td>
-                                                <div
-                                                    class="sparkbar"
-                                                    data-color="#f56954"
-                                                    data-height="20"
-                                                >
-                                                    90,-80,90,70,-61,83,63
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <a
-                                                    href="pages/examples/invoice.html"
-                                                    >OR7429</a
-                                                >
-                                            </td>
-                                            <td>Samsung Smart TV</td>
-                                            <td>
-                                                <span class="badge badge-info"
-                                                    >Processing</span
-                                                >
-                                            </td>
-                                            <td>
-                                                <div
-                                                    class="sparkbar"
-                                                    data-color="#00c0ef"
-                                                    data-height="20"
-                                                >
-                                                    90,80,-90,70,-61,83,63
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <a
-                                                    href="pages/examples/invoice.html"
-                                                    >OR1848</a
-                                                >
-                                            </td>
-                                            <td>Samsung Smart TV</td>
-                                            <td>
-                                                <span
-                                                    class="badge badge-warning"
-                                                    >Pending</span
-                                                >
-                                            </td>
-                                            <td>
-                                                <div
-                                                    class="sparkbar"
-                                                    data-color="#f39c12"
-                                                    data-height="20"
-                                                >
-                                                    90,80,-90,70,61,-83,68
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <a
-                                                    href="pages/examples/invoice.html"
-                                                    >OR7429</a
-                                                >
-                                            </td>
-                                            <td>iPhone 6 Plus</td>
-                                            <td>
-                                                <span class="badge badge-danger"
-                                                    >Delivered</span
-                                                >
-                                            </td>
-                                            <td>
-                                                <div
-                                                    class="sparkbar"
-                                                    data-color="#f56954"
-                                                    data-height="20"
-                                                >
-                                                    90,-80,90,70,-61,83,63
                                                 </div>
                                             </td>
                                         </tr>
@@ -303,6 +192,7 @@
             </div>
             <!-- /.row -->
         </div>
+        <pre>{{ counts }}</pre>
         <!--/. container-fluid -->
     </section>
 </template>
@@ -311,11 +201,22 @@
 export default {
     data() {
         return {
-            count: []
+            counts: []
+        }
+    },
+    methods: {
+        loadCount() {
+            axios
+                .get('/api/dashboard/count')
+                .then((data) => (this.counts = data.data.data))
+                .catch((error) => console.log(error))
         }
     },
     mounted() {
         console.log('Component mounted.')
+    },
+    created() {
+        this.loadCount()
     }
 }
 </script>

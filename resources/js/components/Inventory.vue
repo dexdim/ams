@@ -66,7 +66,10 @@
                                             v-for="inventory in inventories.data"
                                             :key="inventory.id"
                                         >
-                                            <td class="text-center text-bold">
+                                            <td
+                                                class="text-center text-bold"
+                                                style="vertical-align: middle"
+                                            >
                                                 <a
                                                     href="#"
                                                     @click="
@@ -76,27 +79,75 @@
                                                     {{ inventory.idcode }}
                                                 </a>
                                             </td>
-                                            <!--<td class="text-center"><img :src="'https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=' + inventory.idcode" width="30px"></td>-->
-                                            <td>
+                                            <!--<td class="text-center">
+                                                <img
+                                                    :src="
+                                                        'https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=' +
+                                                        inventory.idcode
+                                                    "
+                                                    width="30px"
+                                                />
+                                            </td>-->
+                                            <td style="vertical-align: middle">
                                                 {{ inventory.category.name }}
                                             </td>
-                                            <td>{{ inventory.description }}</td>
-                                            <td>
+                                            <td style="vertical-align: middle">
+                                                {{ inventory.description }}
+                                            </td>
+                                            <td style="vertical-align: middle">
                                                 {{ inventory.serialnumber }}
                                             </td>
-                                            <td>{{ inventory.name }}</td>
-                                            <td>{{ inventory.email }}</td>
-                                            <td class="text-center">
-                                                {{ inventory.status }}
+                                            <td style="vertical-align: middle">
+                                                {{ inventory.name }}
                                             </td>
-                                            <td class="text-center">
+                                            <td style="vertical-align: middle">
+                                                {{ inventory.email }}
+                                            </td>
+                                            <td
+                                                class="text-center"
+                                                style="vertical-align: middle"
+                                            >
+                                                <h6>
+                                                    <span
+                                                        v-bind:class="{
+                                                            'badge badge-success':
+                                                                inventory.status ===
+                                                                'Deployed',
+                                                            'badge badge-primary':
+                                                                inventory.status ===
+                                                                'Storage',
+                                                            'badge badge-warning':
+                                                                inventory.status ===
+                                                                'In Service',
+                                                            'badge badge-danger':
+                                                                inventory.status ===
+                                                                'Broken',
+                                                            'badge badge-secondary':
+                                                                inventory.status ===
+                                                                'Sold'
+                                                        }"
+                                                    >
+                                                        {{
+                                                            inventory.status
+                                                        }}</span
+                                                    >
+                                                </h6>
+                                            </td>
+                                            <td
+                                                class="text-center"
+                                                style="vertical-align: middle"
+                                            >
                                                 {{ inventory.checkdate }}
                                             </td>
-                                            <td class="text-center">
+                                            <td
+                                                class="text-center"
+                                                style="vertical-align: middle"
+                                            >
                                                 {{ inventory.checkedby }}
                                             </td>
                                             <td
                                                 class="text-center"
+                                                style="vertical-align: middle"
                                                 v-if="$gate.isAdmin()"
                                             >
                                                 <a
@@ -343,7 +394,18 @@
                                             class="form-control"
                                             v-model="form.category_id"
                                         >
-                                            <!--<option v-for="(cat, index) in categories" :key="index" :value="index" :selected="index == form.category_id">{{ cat }}</option>-->
+                                            <!--<option
+                                                v-for="(
+                                                    cat, index
+                                                ) in categories"
+                                                :key="index"
+                                                :value="index"
+                                                :selected="
+                                                    index == form.category_id
+                                                "
+                                            >
+                                                {{ cat }}
+                                            </option>-->
                                             <option
                                                 v-for="cat in sortedCategories"
                                                 :key="cat.id"
@@ -355,7 +417,13 @@
                                                 {{ cat.name }}
                                             </option>
                                         </select>
-                                        <!--<v-select v-model="form.category_id" :options="sortedCategories" label="name" value="id" :reduce="(name) => name.id" />-->
+                                        <!--<v-select
+                                            v-model="form.category_id"
+                                            :options="sortedCategories"
+                                            label="name"
+                                            value="id"
+                                            :reduce="(name) => name.id"
+                                        />-->
                                         <has-error
                                             :form="form"
                                             field="category_id"
@@ -478,10 +546,22 @@
                                         ></has-error>
                                     </div>
                                     <!--<div class="form-group col-md-3">
-                    <label>Windows License</label>
-                    <input v-model="form.license" type="text" name="license" class="form-control" :class="{ 'is-invalid': form.errors.has('license') }">
-                    <has-error :form="form" field="license"></has-error>
-                  </div>-->
+                                        <label>Windows License</label>
+                                        <input
+                                            v-model="form.license"
+                                            type="text"
+                                            name="license"
+                                            class="form-control"
+                                            :class="{
+                                                'is-invalid':
+                                                    form.errors.has('license')
+                                            }"
+                                        />
+                                        <has-error
+                                            :form="form"
+                                            field="license"
+                                        ></has-error>
+                                    </div>-->
                                 </div>
 
                                 <div class="form-row">
@@ -689,7 +769,7 @@ export default {
                 'Deployed',
                 'Working',
                 'Lost',
-                'Sold',
+                'In Service',
                 'Broken'
             ],
             categories: [],
@@ -796,9 +876,9 @@ export default {
                         title: response.data.message
                     })
                     this.$Progress.finish()
-                    //  Fire.$emit('AfterCreate');
+                    //Fire.$emit('AfterCreate')
                     this.loadInventory()
-                    //  this.reloadInventory(this.form.id);
+                    //this.reloadInventory(this.form.id)
                 })
                 .catch(() => {
                     this.$Progress.fail()
@@ -824,7 +904,7 @@ export default {
                                 'Your record has been deleted.',
                                 'success'
                             )
-                            // Fire.$emit('AfterCreate');
+                            //Fire.$emit('AfterCreate')
                             this.loadInventory()
                         })
                         .catch((data) => {
@@ -853,7 +933,7 @@ export default {
                                 'Your record has been duplicated.',
                                 'success'
                             )
-                            // Fire.$emit('AfterCreate');
+                            //Fire.$emit('AfterCreate')
                             this.loadInventory()
                         })
                         .catch((data) => {
@@ -868,11 +948,10 @@ export default {
         }
     },
 
-    mounted() {
-        this.loadInventory()
-    },
+    mounted() {},
 
     created() {
+        this.loadInventory()
         this.$Progress.start()
         this.loadAll()
         this.loadCategory()

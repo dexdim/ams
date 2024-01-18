@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\API\V1;
+namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
+
 use App\Http\Requests\Users\ChangePasswordRequest;
 use App\Http\Requests\Users\ProfileUpdateRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
-class ProfileController extends Controller
+class ProfileController extends BaseController
 {
     /**
      * Create a new controller instance.

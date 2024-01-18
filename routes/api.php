@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\API\V1\InventoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
@@ -20,26 +19,28 @@ Route::get('version', function () {
     return response()->json(['version' => config('app.version')]);
 });
 
-
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     Log::debug('User:' . serialize($request->user()));
     return $request->user();
 });
 
-
-Route::namespace('App\\Http\\Controllers\\API\V1')->group(function () {
+Route::namespace('App\Http\Controllers\API')->group(function () {
+    //GET
     Route::get('profile', 'ProfileController@profile');
-    Route::put('profile', 'ProfileController@updateProfile');
-    Route::post('change-password', 'ProfileController@changePassword');
     Route::get('category/list', 'CategoryController@list');
     Route::get('user/list', 'UserController@list');
     Route::get('inventory', 'InventoryController@index');
     Route::get('inventory/search', 'InventoryController@search');
     Route::get('employee/list', 'EmployeeController@list');
     Route::get('inventory/all', 'InventoryController@all');
+    Route::get('dashboard/count', 'InventoryController@counts');
+    Route::get('dashboard/instorage', 'InventoryController@inStorage');
+    //POST
+    Route::post('change-password', 'ProfileController@changePassword');
     Route::post('inventory/duplicate/{id}', 'InventoryController@duplicate');
-    Route::get('inventory/count', 'InventoryController@count');
-
+    //PUT
+    Route::put('profile', 'ProfileController@updateProfile');
+    //RESOURCES
     Route::apiResources([
         'user' => 'UserController',
         'inventory' => 'InventoryController',
