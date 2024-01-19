@@ -133,7 +133,7 @@ class InventoryController extends BaseController
         $deployed = $this->inventory->where('status', 'Deployed')->count();
         $storage = $this->inventory->where('status', 'Storage')->count();
         $inservice = $this->inventory->where('status', 'In Service')->count();
-        $broken = $this->inventory->where('status', 'Deployed')->count();
+        $broken = $this->inventory->where('status', 'Broken')->count();
         $laptop = $this->inventory->where('category_id', '8')->count();
         $monitor = $this->inventory->where('category_id', '2')->count();
         $server = $this->inventory->where('category_id', '7')->count();
