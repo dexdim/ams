@@ -8,6 +8,11 @@
                             <button
                                 type="button"
                                 class="btn btn-sm btn-primary"
+                                style="
+                                    position: absolute;
+                                    top: 15px;
+                                    right: 25px;
+                                "
                                 @click="newEmployee"
                             >
                                 <i class="fa fa-plus-square"></i>
@@ -352,11 +357,5 @@ export default {
 .card-header {
     position: relative;
     height: 60px;
-}
-
-.btn {
-    position: absolute;
-    top: 15px;
-    right: 25px;
 }
 </style>
