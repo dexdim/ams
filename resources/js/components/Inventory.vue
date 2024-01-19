@@ -951,17 +951,11 @@ export default {
     mounted() {},
 
     created() {
-        this.loadInventory()
         this.$Progress.start()
+        this.loadInventory()
         this.loadAll()
         this.loadCategory()
         this.loadEmployee()
-        Fire.$on('searching', () => {
-            let query = this.$parent.search
-            axios
-                .get('api/search?q=' + query)
-                .then((data) => (this.inventories = data.data))
-        })
         this.$Progress.finish()
     },
 

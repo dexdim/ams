@@ -51,6 +51,12 @@ class InventoryController extends BaseController
         return $this->sendResponse($inventories, 'All inventory list');
     }
 
+    public function inStorage()
+    {
+        $inventories = $this->inventory->where('status', 'Storage')->latest()->with('category', 'employee')->paginate(5);
+        return $this->sendResponse($inventories, 'In Storage List');
+    }
+
     /**
      * Store a newly created resource in storage.
      * @param  App\Http\Requests\Inventory\InventoryRequest  $request
@@ -122,19 +128,18 @@ class InventoryController extends BaseController
         $duplicate->push();
     }
 
-    public function count()
+    public function counts()
     {
         $deployed = $this->inventory->where('status', 'Deployed')->count();
         $storage = $this->inventory->where('status', 'Storage')->count();
         $inservice = $this->inventory->where('status', 'In Service')->count();
         $broken = $this->inventory->where('status', 'Deployed')->count();
-        $totalEmployees = $this->inventory->count('employee');
-        return response()->json([
-            'deployed_count' => $deployed,
-            'storage_count' => $storage,
-            'inservice_count' => $inservice,
-            'broken_count' => $broken,
-            'total_employees' => $totalEmployees,
-        ]);
+        $laptop = $this->inventory->where('category_id', '8')->count();
+        $monitor = $this->inventory->where('category_id', '2')->count();
+        $server = $this->inventory->where('category_id', '7')->count();
+        $handphone = $this->inventory->where('category_id', '22')->count();
+        $inventories = compact('deployed', 'storage', 'inservice', 'broken', 'laptop', 'monitor', 'server', 'handphone');
+
+        return $this->sendResponse($inventories, 'Dashboard list');
     }
 }

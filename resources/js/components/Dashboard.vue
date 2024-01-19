@@ -70,129 +70,178 @@
                 <!-- /.col -->
             </div>
             <!-- /.row -->
-
-            <div class="row">
-                <!-- Left col -->
-                <div class="col-md-8">
-                    <!-- MAP & BOX PANE -->
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Device in Storage</h3>
-                            <div class="card-tools">
-                                <button
-                                    type="button"
-                                    class="btn btn-tool"
-                                    data-card-widget="collapse"
-                                >
-                                    <i class="fas fa-minus"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <!-- /.card-header -->
-                        <div class="card-body p-0">
-                            <div class="table-responsive">
-                                <table
-                                    class="table table-hover table-bordered table-condensed m-0"
-                                >
-                                    <thead class="thead-dark text-center">
-                                        <tr>
-                                            <th>ID Code</th>
-                                            <th>Category</th>
-                                            <th>Description</th>
-                                            <th>User History</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td
-                                                class="text-center text-bold"
-                                                style="vertical-align: middle"
+            <section class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <!-- Left col -->
+                        <div class="col-8">
+                            <!-- MAP & BOX PANE -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">
+                                        Device in Storage
+                                    </h3>
+                                    <div class="card-tools">
+                                        <button
+                                            type="button"
+                                            class="btn btn-tool"
+                                            data-card-widget="collapse"
+                                        >
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- /.card-header -->
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <table
+                                            class="table table-hover table-bordered table-condensed"
+                                        >
+                                            <thead
+                                                class="thead-dark text-center"
                                             >
-                                                <a
-                                                    href="pages/examples/invoice.html"
-                                                    >OR9842</a
+                                                <tr>
+                                                    <th width="10%">ID Code</th>
+                                                    <th width="10%">
+                                                        Category
+                                                    </th>
+                                                    <th width="50%">
+                                                        Description
+                                                    </th>
+                                                    <th width="30%">
+                                                        User History
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr
+                                                    v-for="instorage in inStorage.data"
+                                                    :key="instorage.id"
                                                 >
-                                            </td>
-                                            <td>Call of Duty IV</td>
-                                            <td>
-                                                <span
-                                                    class="badge badge-success"
-                                                    >Shipped</span
-                                                >
-                                            </td>
-                                            <td>
-                                                <div
-                                                    class="sparkbar"
-                                                    data-color="#00a65a"
-                                                    data-height="20"
-                                                >
-                                                    90,80,90,-70,61,-83,63
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                                    <td
+                                                        class="text-center text-bold"
+                                                        style="
+                                                            vertical-align: middle;
+                                                        "
+                                                    >
+                                                        <a
+                                                            href="pages/examples/invoice.html"
+                                                            >{{
+                                                                instorage.idcode
+                                                            }}</a
+                                                        >
+                                                    </td>
+                                                    <td
+                                                        style="
+                                                            vertical-align: middle;
+                                                        "
+                                                    >
+                                                        {{
+                                                            instorage.category
+                                                                .name
+                                                        }}
+                                                    </td>
+                                                    <td
+                                                        style="
+                                                            vertical-align: middle;
+                                                        "
+                                                    >
+                                                        {{
+                                                            instorage.description
+                                                        }}
+                                                    </td>
+                                                    <td
+                                                        style="
+                                                            vertical-align: middle;
+                                                        "
+                                                    >
+                                                        {{ instorage.history }}
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <!-- /.card-body -->
+                                <div class="card-footer">
+                                    <div class="pagination-container">
+                                        <pagination
+                                            :data="inStorage"
+                                            @pagination-change-page="
+                                                loadInStorage
+                                            "
+                                            :limit="25"
+                                        ></pagination>
+                                    </div>
+                                </div>
                             </div>
+                            <!-- /.card -->
+                            <!-- /.card -->
                         </div>
-                        <!-- /.card-body -->
-                    </div>
-                    <!-- /.card -->
-                    <!-- /.card -->
-                </div>
-                <!-- /.col -->
+                        <!-- /.col -->
 
-                <div class="col-md-4">
-                    <!-- Info Boxes Style 2 -->
-                    <div class="info-box mb-3 bg-secondary">
-                        <span class="info-box-icon"
-                            ><i class="fas fa-tag"></i
-                        ></span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">Inventory</span>
-                            <span class="info-box-number">5,200</span>
+                        <div class="col-md-4">
+                            <!-- Info Boxes Style 2 -->
+                            <div class="info-box mb-3 bg-info">
+                                <span class="info-box-icon"
+                                    ><i class="fas fa-laptop"></i
+                                ></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Laptop</span>
+                                    <span class="info-box-number"
+                                        >{{ counts.laptop }} units</span
+                                    >
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                            <div class="info-box mb-3 bg-info">
+                                <span class="info-box-icon"
+                                    ><i class="fas fa-tv"></i
+                                ></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Monitor</span>
+                                    <span class="info-box-number"
+                                        >{{ counts.monitor }} units</span
+                                    >
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                            <div class="info-box mb-3 bg-info">
+                                <span class="info-box-icon"
+                                    ><i class="fas fa-mobile-alt"></i
+                                ></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Handphone</span>
+                                    <span class="info-box-number"
+                                        >{{ counts.handphone }} units</span
+                                    >
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                            <div class="info-box mb-3 bg-info">
+                                <span class="info-box-icon"
+                                    ><i class="fas fa-server"></i
+                                ></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Server</span>
+                                    <span class="info-box-number"
+                                        >{{ counts.server }} units</span
+                                    >
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
                         </div>
-                        <!-- /.info-box-content -->
+                        <!-- /.col -->
                     </div>
-                    <!-- /.info-box -->
-                    <div class="info-box mb-3 bg-success">
-                        <span class="info-box-icon"
-                            ><i class="far fa-heart"></i
-                        ></span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">Mentions</span>
-                            <span class="info-box-number">92,050</span>
-                        </div>
-                        <!-- /.info-box-content -->
-                    </div>
-                    <!-- /.info-box -->
-                    <div class="info-box mb-3 bg-danger">
-                        <span class="info-box-icon"
-                            ><i class="fas fa-cloud-download-alt"></i
-                        ></span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">Downloads</span>
-                            <span class="info-box-number">114,381</span>
-                        </div>
-                        <!-- /.info-box-content -->
-                    </div>
-                    <!-- /.info-box -->
-                    <div class="info-box mb-3 bg-info">
-                        <span class="info-box-icon"
-                            ><i class="far fa-comment"></i
-                        ></span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">Direct Messages</span>
-                            <span class="info-box-number">163,921</span>
-                        </div>
-                        <!-- /.info-box-content -->
-                    </div>
-                    <!-- /.info-box -->
+                    <!-- /.row -->
                 </div>
-                <!-- /.col -->
-            </div>
-            <!-- /.row -->
+            </section>
         </div>
-        <pre>{{ counts }}</pre>
+        <!--<pre>{{ counts }}</pre>-->
         <!--/. container-fluid -->
     </section>
 </template>
@@ -201,7 +250,9 @@
 export default {
     data() {
         return {
-            counts: []
+            counts: [],
+            inStorage: [],
+            inService: []
         }
     },
     methods: {
@@ -210,13 +261,38 @@ export default {
                 .get('/api/dashboard/count')
                 .then((data) => (this.counts = data.data.data))
                 .catch((error) => console.log(error))
+        },
+
+        loadInStorage() {
+            axios
+                .get('/api/dashboard/instorage')
+                .then((data) => (this.inStorage = data.data.data))
+                .catch((error) => console.log(error))
+        },
+
+        loadInService() {
+            axios
+                .get('/api/dashboard/instorage')
+                .then((data) => (this.inService = data.data.data))
+                .catch((error) => console.log(error))
         }
     },
     mounted() {
         console.log('Component mounted.')
     },
     created() {
+        this.$Progress.start()
         this.loadCount()
+        this.loadInStorage()
+        this.loadInService()
+        this.$Progress.finish()
     }
 }
 </script>
+
+<style scoped>
+.pagination-container {
+    max-height: 200px;
+    overflow-y: auto;
+}
+</style>
