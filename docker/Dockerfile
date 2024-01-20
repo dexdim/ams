@@ -1,10 +1,11 @@
+# Defince php
 FROM php:8.1-fpm
-
-# Copy composer.lock and composer.json
-COPY composer.lock composer.json /var/www/
 
 # Set working directory
 WORKDIR /var/www
+
+# Copy composer.lock and composer.json
+COPY composer.json /var/www/
 
 # Install dependencies
 RUN apt-get update && apt-get install -y \
@@ -35,9 +36,13 @@ RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 RUN apt-get update && apt-get install -y libpq-dev && docker-php-ext-install pdo pdo_pgsql
 
 # Install composer
-#RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+ENV COMPOSER_ALLOW_SUPERUSER=1
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 #RUN curl -sS https://getcomposer.org/installer | php -- \
 #--install-dir=/usr/bin --filename=composer && chmod +x /usr/bin/composer
+RUN composer update
+RUN composer install
+
 # Add user for laravel application
 RUN groupadd -g 1000 www
 RUN useradd -u 1000 -ms /bin/bash -g www www
