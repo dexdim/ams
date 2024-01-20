@@ -241,7 +241,7 @@
                 </div>
             </section>
         </div>
-        <!--<pre>{{ counts }}</pre>-->
+        <!--<pre>{{ inStorage }}</pre>-->
         <!--/. container-fluid -->
     </section>
 </template>
@@ -251,7 +251,7 @@ export default {
     data() {
         return {
             counts: [],
-            inStorage: [],
+            inStorage: {},
             inService: []
         }
     },
@@ -263,16 +263,16 @@ export default {
                 .catch((error) => console.log(error))
         },
 
-        loadInStorage() {
+        loadInStorage(page = 1) {
             axios
-                .get('/api/dashboard/instorage')
+                .get(`/api/dashboard/instorage?page=${page}`)
                 .then((data) => (this.inStorage = data.data.data))
                 .catch((error) => console.log(error))
         },
 
         loadInService() {
             axios
-                .get('/api/dashboard/instorage')
+                .get('/api/dashboard/inservice')
                 .then((data) => (this.inService = data.data.data))
                 .catch((error) => console.log(error))
         }

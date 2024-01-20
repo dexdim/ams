@@ -112,7 +112,8 @@
                                                         v-bind:class="{
                                                             'badge badge-success':
                                                                 inventory.status ===
-                                                                'Deployed',
+                                                                    'Deployed' ||
+                                                                'Working',
                                                             'badge badge-primary':
                                                                 inventory.status ===
                                                                 'Storage',
@@ -137,7 +138,11 @@
                                                 class="text-center"
                                                 style="vertical-align: middle"
                                             >
-                                                {{ inventory.checkdate }}
+                                                {{
+                                                    formatDate(
+                                                        inventory.checkdate
+                                                    )
+                                                }}
                                             </td>
                                             <td
                                                 class="text-center"
@@ -531,7 +536,7 @@
                                         <date-picker
                                             v-model="form.purchasedate"
                                             value-type="format"
-                                            format="DD MMMM YYYY"
+                                            format="D MMM YYYY"
                                             name="purchasedate"
                                             :class="{
                                                 'is-invalid':
@@ -670,7 +675,7 @@
                                         <date-picker
                                             v-model="form.checkdate"
                                             value-type="format"
-                                            format="DD MMMM YYYY"
+                                            format="D MMM YYYY"
                                             name="checkdate"
                                             :class="{
                                                 'is-invalid':
@@ -688,8 +693,8 @@
                                             class="form-control"
                                             v-model="form.checkedby"
                                         >
-                                            <option>Dimas</option>
-                                            <option>Kinan</option>
+                                            <option>Adith</option>
+                                            <option>Maudy</option>
                                         </select>
                                         <has-error
                                             :form="form"
@@ -770,7 +775,8 @@ export default {
                 'Working',
                 'Lost',
                 'In Service',
-                'Broken'
+                'Broken',
+                'Sold'
             ],
             categories: [],
             employees: []
@@ -945,6 +951,11 @@ export default {
 
         searchInventory() {
             this.loadInventory()
+        },
+        formatDate(dateString) {
+            const date = new Date(dateString)
+            const options = { day: 'numeric', month: 'short', year: 'numeric' }
+            return date.toLocaleDateString('en-GB', options)
         }
     },
 
