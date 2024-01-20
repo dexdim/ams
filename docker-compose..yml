@@ -1,19 +1,19 @@
-version: "3.1"
+version: '3.1'
 services:
   traefik:
     image: traefik:v2.8
     container_name: ams-traefik
     restart: always
     command:
-      - "--api.insecure=true"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:80"
+      - '--api.insecure=true'
+      - '--providers.docker=true'
+      - '--providers.docker.exposedbydefault=false'
+      - '--entrypoints.web.address=:80'
     ports:
-      - "80:80"
-      - "8080:8080"
+      - '80:80'
+      - '8080:8080'
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
     networks:
       - app-network
 
@@ -42,8 +42,8 @@ services:
     restart: always
     tty: true
     labels:
-      - "traefik.enable=true"
-      - traefik.http.routers.webserver.rule=Host(`103.161.185.68`)
+      - 'traefik.enable=true'
+      - traefik.http.routers.webserver.rule=Host(`192.168.1.236`)
       - traefik.http.services.webserver.loadbalancer.server.port=80
       # ports:
       #   - "8008:80"
@@ -80,7 +80,7 @@ services:
     container_name: ams-adminer
     restart: unless-stopped
     labels:
-      - "traefik.enable=true"
+      - 'traefik.enable=true'
       - traefik.http.routers.adminer.rule=Host(`db.remote`)
       - traefik.http.services.adminer.loadbalancer.server.port=8080
     ports:

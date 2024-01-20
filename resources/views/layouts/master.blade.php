@@ -37,7 +37,7 @@
             <!-- Brand Logo -->
             <div class="top-sidebar">
                 <router-link to="/inventory" class="brand-link">
-                    <img src="{{ asset('/images/logo-2.png') }}" alt="The Logo" class="brand-image">
+                    <img src="{{ asset('/images/logo-old.png') }}" alt="The Logo" class="brand-image">
                     <span class="brand-text">{{ config('app.name', 'Laravel') }}</span>
                 </router-link>
             </div>
@@ -101,7 +101,7 @@
                 <b>Version</b> 2.0.1
             </div>
             {{-- Default to the left --}}
-            <strong>Copyright &copy; 2024 <a href="https://domainesia.com">Deneva</a>.</strong> All rights
+            <strong>Copyright &copy; 2024 <a href="https://niagahoster.co.id">Niagahoster</a>.</strong> All rights
             reserved.
         </footer>
     </div>
