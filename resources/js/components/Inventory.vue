@@ -113,6 +113,10 @@
                                                             'badge badge-success':
                                                                 inventory.status ===
                                                                     'Deployed' ||
+                                                                inventory.status ===
+                                                                    'Working',
+                                                            'badge badge-blue':
+                                                                inventory.status ===
                                                                 'Working',
                                                             'badge badge-primary':
                                                                 inventory.status ===
@@ -122,7 +126,9 @@
                                                                 'In Service',
                                                             'badge badge-danger':
                                                                 inventory.status ===
-                                                                'Broken',
+                                                                    'Broken' ||
+                                                                inventory.status ===
+                                                                    'Lost',
                                                             'badge badge-secondary':
                                                                 inventory.status ===
                                                                 'Sold'
