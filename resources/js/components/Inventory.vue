@@ -115,7 +115,7 @@
                                                                     'Deployed' ||
                                                                 inventory.status ===
                                                                     'Working',
-                                                                'badge badge-primary':
+                                                            'badge badge-primary':
                                                                 inventory.status ===
                                                                 'Storage',
                                                             'badge badge-warning':
