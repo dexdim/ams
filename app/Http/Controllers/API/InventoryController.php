@@ -8,10 +8,14 @@ use Illuminate\Http\Request;
 
 class InventoryController extends BaseController
 {
-    protected $inventory = '';
+    /**
+     * @var Inventory
+     */
+    protected $inventory;
+
     /**
      * Create a new controller instance.
-     * @return void
+     * @param Inventory $inventory
      */
     public function __construct(Inventory $inventory)
     {
@@ -21,7 +25,6 @@ class InventoryController extends BaseController
 
     /**
      * Display a listing of the resource.
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
@@ -31,17 +34,21 @@ class InventoryController extends BaseController
     public function search(Request $request)
     {
         $search = $request->input('search');
+
         $inventories = Inventory::where(function ($query) use ($search) {
             $query->where('idcode', 'LIKE', "%$search%")
-                ->orWhere('category', 'LIKE', "%$search%")
-                ->orWhere('description', 'LIKE', "%$search%")
-                ->orWhere('serialnumber', 'LIKE', "%$search%")
                 ->orWhere('name', 'LIKE', "%$search%")
-                ->orWhere('email', 'LIKE', "%$search%")
+                ->orWhere('description', 'LIKE', "%$search%")
                 ->orWhere('status', 'LIKE', "%$search%")
-                ->orWhere('history', 'LIKE', "%$search%")
-                ->orWhere('notes', 'LIKE', "%$search%");
-        })->latest()->with('category', 'employee')->paginate(10);
+                // Search categories table
+                ->orWhereHas('category', function ($q) use ($search) {
+                    $q->where('name', 'LIKE', "%$search%");
+                });
+        })
+            ->latest()
+            ->with(['category']) // Removed 'employee' if it's causing the crash
+            ->paginate(10);
+
         return $this->sendResponse($inventories, 'Inventory list');
     }
 
@@ -53,93 +60,70 @@ class InventoryController extends BaseController
 
     public function inStorage()
     {
-        $inventories = $this->inventory->where('status', 'Storage')->latest()->with('category', 'employee')->paginate(5);
+        $inventories = $this->inventory->where('status', 'Storage')
+            ->latest()
+            ->with(['category', 'employee'])
+            ->paginate(5);
+
         return $this->sendResponse($inventories, 'In Storage List');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     * @param  App\Http\Requests\Inventory\InventoryRequest  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(InventoryRequest $request)
     {
-        $inventories = $this->inventory->create([
-            'idcode' => $request->get('idcode'),
-            'category_id' => $request->get('category_id'),
-            'description' => $request->get('description'),
-            'brand' => $request->get('brand'),
-            'serialnumber' => $request->get('serialnumber'),
-            'supplier' => $request->get('supplier'),
-            'purchasecost' => $request->get('purchasecost'),
-            'purchasedate' => $request->get('purchasedate'),
-            'license' => $request->get('license'),
-            'name' => $request->get('name'),
-            'email' => $request->get('email'),
-            'status' => $request->get('status'),
-            'history' => $request->get('history'),
-            'notes' => $request->get('notes'),
-            'checkdate' => $request->get('checkdate'),
-            'checkedby' => $request->get('checkedby'),
-        ]);
-        return $this->sendResponse($inventories, 'Inventory created successfully');
+        $inventory = $this->inventory->create($request->all());
+        return $this->sendResponse($inventory, 'Inventory created successfully');
     }
 
-    /**
-     * Display the specified resource.
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
-        $inventories = $this->inventory->with('category', 'employee')->findOrFail($id);
-        return $this->sendResponse($inventories, 'Inventory Details');
+        $inventory = $this->inventory->with(['category', 'employee'])->findOrFail($id);
+        return $this->sendResponse($inventory, 'Inventory Details');
     }
 
-    /**
-     * Update the specified resource in storage.
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Inventory  $inventory
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        $inventories = $this->inventory->findOrFail($id);
-        $inventories->update($request->all());
-        return $this->sendResponse($inventories, 'Inventory information has been updated');
+        $inventory = $this->inventory->findOrFail($id);
+        $inventory->update($request->all());
+        return $this->sendResponse($inventory, 'Inventory information has been updated');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $this->authorize('isAdmin');
-        $inventories = $this->inventory->findOrFail($id);
-        $inventories->delete();
-        return $this->sendResponse($inventories, 'Inventory has been deleted');
+        $inventory = $this->inventory->findOrFail($id);
+        $inventory->delete();
+        return $this->sendResponse($inventory, 'Inventory has been deleted');
     }
 
     public function duplicate($id)
     {
-        $record = Inventory::find($id);
+        $record = Inventory::findOrFail($id);
         $duplicate = $record->replicate();
-        $duplicate->push();
+
+        $baseCode = explode(' copy', $record->idcode)[0];
+        $count = Inventory::where('idcode', 'LIKE', $baseCode . ' copy%')->count();
+        $nextNumber = $count + 1;
+
+        $duplicate->idcode = $baseCode . " copy " . $nextNumber;
+        $duplicate->serialnumber = null;
+        $duplicate->save();
+
+        return $this->sendResponse($duplicate, 'Inventory duplicated successfully');
     }
 
     public function counts()
     {
-        $deployed = $this->inventory->where('status', 'Deployed')->count();
-        $storage = $this->inventory->where('status', 'Storage')->count();
-        $inservice = $this->inventory->where('status', 'In Service')->count();
-        $broken = $this->inventory->where('status', 'Broken')->count();
-        $laptop = $this->inventory->where('category_id', '8')->count();
-        $monitor = $this->inventory->where('category_id', '2')->count();
-        $server = $this->inventory->where('category_id', '7')->count();
-        $handphone = $this->inventory->where('category_id', '22')->count();
-        $inventories = compact('deployed', 'storage', 'inservice', 'broken', 'laptop', 'monitor', 'server', 'handphone');
+        $counts = [
+            'deployed'  => $this->inventory->where('status', 'Deployed')->count(),
+            'storage'   => $this->inventory->where('status', 'Storage')->count(),
+            'inservice' => $this->inventory->where('status', 'In Service')->count(),
+            'broken'    => $this->inventory->where('status', 'Broken')->count(),
+            'laptop'    => $this->inventory->where('category_id', '1')->count(),
+            'monitor'   => $this->inventory->where('category_id', '2')->count(),
+            'server'    => $this->inventory->where('category_id', '3')->count(),
+            'handphone' => $this->inventory->where('category_id', '4')->count(),
+        ];
 
-        return $this->sendResponse($inventories, 'Dashboard list');
+        return $this->sendResponse($counts, 'Dashboard list');
     }
 }

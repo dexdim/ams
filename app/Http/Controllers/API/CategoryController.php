@@ -7,10 +7,14 @@ use Illuminate\Http\Request;
 
 class CategoryController extends BaseController
 {
-    protected $category = '';
+    /**
+     * @var Category
+     */
+    protected $category;
+
     /**
      * Create a new controller instance.
-     * @return void
+     * @param Category $category
      */
     public function __construct(Category $category)
     {
@@ -20,62 +24,61 @@ class CategoryController extends BaseController
 
     /**
      * Display a listing of the resource.
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $categories = $this->category->paginate(10);
+        $categories = $this->category->latest()->paginate(10);
         return $this->sendResponse($categories, 'Category list');
     }
 
     /**
-     * Display a listing of the resource.
-     * @return \Illuminate\Http\Response
+     * Display a listing for dropdowns.
      */
     public function list()
     {
-        $categories = $this->category->pluck('name', 'id');
+        // Pluck is good for simple IDs/Names, 
+        // but often 'all()' is better if your Vue select needs full objects.
+        $categories = $this->category->all();
         return $this->sendResponse($categories, 'Category list');
     }
 
-
     /**
      * Store a newly created resource in storage.
-     * @param $id
-     * @return \Illuminate\Http\Response
-     * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request)
     {
-        $categories = $this->category->create([
-            'name' => $request->get('name'),
-            'description' => $request->get('description'),
+        $this->validate($request, [
+            'name' => 'required|string|max:191|unique:categories',
         ]);
-        return $this->sendResponse($categories, 'Category Created Successfully');
+
+        $category = $this->category->create($request->all());
+        return $this->sendResponse($category, 'Category Created Successfully');
     }
 
     /**
-     * Update the resource in storage
-     * @param $id
-     * @return \Illuminate\Http\Response
-     * @throws \Illuminate\Validation\ValidationException
+     * Update the resource in storage.
      */
     public function update(Request $request, $id)
     {
-        $categories = $this->category->findOrFail($id);
-        $categories->update($request->all());
-        return $this->sendResponse($categories, 'Category Information has been updated');
+        $category = $this->category->findOrFail($id);
+
+        $this->validate($request, [
+            'name' => 'required|string|max:191|unique:categories,name,' . $category->id,
+        ]);
+
+        $category->update($request->all());
+        return $this->sendResponse($category, 'Category Information has been updated');
     }
 
     /**
      * Remove the specified category.
-     * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         $this->authorize('isAdmin');
-        $categories = $this->category->findOrFail($id);
-        $categories->delete();
-        return $this->sendResponse($categories, 'Category has been deleted');
+        $category = $this->category->findOrFail($id);
+        $category->delete();
+
+        return $this->sendResponse($category, 'Category has been deleted');
     }
 }

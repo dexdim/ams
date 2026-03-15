@@ -1,51 +1,25 @@
 <?php
 
-
 namespace Database\Seeders;
 
-
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
+use App\Models\Category;
 
 class CategoriesTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
-        DB::table('categories')->truncate();
+        $categories = [
+            ['id' => 1, 'name' => 'Laptop', 'description' => 'Portable computers'],
+            ['id' => 2, 'name' => 'Monitor', 'description' => 'Display screens'],
+            ['id' => 3, 'name' => 'Server', 'description' => 'Data center equipment'],
+            ['id' => 4, 'name' => 'Laptop (Old)', 'description' => 'Legacy laptops'],
+            ['id' => 5, 'name' => 'Handphone', 'description' => 'Mobile devices'],
+            ['id' => 6, 'name' => 'Furniture', 'description' => 'Desks and chairs'],
+        ];
 
-        DB::table('categories')->insert(
-            [
-                [
-                    'name' => 'Electrical Vehicle/e-Power',
-                    'description' => Str::words(50),
-                ],
-                [
-                    'name' => 'Compact Car',
-                    'description' => Str::words(50),
-                ],
-                [
-                    'name' => 'Light Car',
-                    'description' => Str::words(50),
-                ],
-                [
-                    'name' => 'Minivan',
-                    'description' => Str::words(50),
-                ],
-                [
-                    'name' => 'Sports & Specialty',
-                    'description' => Str::words(50),
-                ],
-                [
-                    'name' => 'Sedan',
-                    'description' => Str::words(50),
-                ],
-            ]
-        );
+        foreach ($categories as $category) {
+            Category::updateOrCreate(['id' => $category['id']], $category);
+        }
     }
 }
